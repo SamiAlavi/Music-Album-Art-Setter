@@ -1,0 +1,66 @@
+import os
+import requests
+import stagger
+from selenium import webdriver
+
+def setArt(song, art):
+    mp3=stagger.read_tag(song)
+    mp3.picture=art
+    mp3.write()
+
+def saveImage(iname,link):
+    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
+    img_data = requests.get(link, headers=headers).content
+    with open('downloads/'+iname+'.jpg', 'wb') as f:
+        f.write(img_data)
+
+def downloadImage(driver,url,query):
+    q=query[:-4].replace(' ','+')+'&size=large'
+    xpath='/html/body/div[1]/div/main/div[2]/div/a[1]/img'
+    driver.get(url+q)
+
+    link = driver.find_element_by_xpath(xpath).get_attribute("src")
+    #print(link)
+    saveImage(query,link)
+
+def getAllArts(search_queries):
+    options = webdriver.ChromeOptions()
+    options.add_argument('headless') ##remove this to visualize the automation
+    driver = webdriver.Chrome('chromedriver(v80).exe',chrome_options=options) # Using Chrome to access
+    url='https://www.ecosia.org/images?q='
+    for query in search_queries:
+        try:
+            downloadImage(driver,url,query)
+        except:
+            with open('.errors(downloadImage).txt','a+') as f:
+                f.write(query+'\n')
+    driver.quit()
+
+def setAlbum(path,music):
+    with open("##COUNT.txt", "r") as f:
+        count=int(f.read())
+    
+    for i in music:
+        count+=1
+        mp3=stagger.read_tag(path+i)
+        mp3.album=str(count)
+        mp3.write()
+        
+    with open("##COUNT.txt", "w") as f:
+        f.write(str(count))
+
+path='Music/'
+files = os.listdir(path)
+
+getAllArts(files) #getAllArts called
+
+#setArt
+for i in files:        
+    try:
+        setArt(path+i,'downloads/'+i+'.jpg')
+    except:
+        with open('errors(setArt).txt','a+') as f:
+            f.write(i+'\n')
+            print(i)
+
+setAlbum(path,files) #setAlbum called
