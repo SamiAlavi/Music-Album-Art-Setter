@@ -26,7 +26,8 @@ def downloadImage(driver,url,query):
 def getAllArts(search_queries):
     options = webdriver.ChromeOptions()
     options.add_argument('headless') ##remove this to visualize the automation
-    driver = webdriver.Chrome('chromedriver(v80).exe',chrome_options=options) # Using Chrome to access
+    
+    driver = webdriver.Chrome('chromedriver.exe',chrome_options=options) # Using Chrome to access
     url='https://www.ecosia.org/images?q='
     for query in search_queries:
         try:
