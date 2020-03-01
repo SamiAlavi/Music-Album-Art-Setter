@@ -9,5 +9,5 @@ Music Album Art Setter (using selenium)
 ![Chrome Version](https://i.ibb.co/mSq48JS/fixed-settings.png)
 5) Download the chrome driver for the chrome version from https://chromedriver.chromium.org/downloads
 6) Extract the downloaded zip file and replace the **`chromedriver.exe`** with the downloaded one
-7) Copy your music in the **`/Music`** folder
-8) Run **`00. combined.py`**
+7) Copy your music in the **`/Music/`** folder
+8) Run **`main.py`**

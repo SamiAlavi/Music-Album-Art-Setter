@@ -1,10 +1,9 @@
-import os
-import requests
-import stagger
+from requests import get
+from stagger import read_tag
 from selenium import webdriver
 
 def setArt(song, art):
-    mp3=stagger.read_tag(song)
+    mp3=read_tag(song)
     mp3.picture=art
     mp3.write()
 
@@ -22,7 +21,7 @@ def setArtRunner(path,files,audioforms):
 
 def saveImage(iname,link):
     headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
-    img_data = requests.get(link, headers=headers).content
+    img_data = get(link, headers=headers).content
     with open('downloads/'+iname+'.jpg', 'wb') as f:
         f.write(img_data)
 
@@ -64,7 +63,7 @@ def setAlbum(path,music,audioforms):
         for formats in audioforms:
             if checkformat(i, formats):
                 count+=1
-                mp3=stagger.read_tag(path+i)
+                mp3=read_tag(path+i)
                 mp3.album=str(count)
                 mp3.write()
                 break
@@ -72,10 +71,3 @@ def setAlbum(path,music,audioforms):
     with open("##COUNT.txt", "w") as f:
         f.write(str(count))
 
-path='Music/'
-files = os.listdir(path)
-audioforms = ['.mp3'] #.mp3 supported
-
-getAllArts(files,audioforms) #getAllArts called
-setArtRunner(path,files,audioforms) #setArtRunner called
-setAlbum(path,files,audioforms) #setAlbum called
