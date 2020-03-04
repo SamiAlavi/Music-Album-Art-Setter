@@ -15,18 +15,18 @@ def setArtRunner(path,files,audioforms):
                     setArt(path+filename,'downloads/'+filename+'.jpg')
                 except:
                     with open('errors(setArt).txt','a+') as f:
-                        f.write(filename+'\n')
+                        f.write(filename+'not found in downloads\n')
                 break
 
 
 def saveImage(iname,link):
     headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
     img_data = get(link, headers=headers).content
-    with open('downloads/'+iname+'.jpg', 'wb') as f:
+    with open('downloads/'+iname+'.mp3.jpg', 'wb') as f:
         f.write(img_data)
 
-def downloadImage(driver,url,query):
-    q=query[:-4].replace(' ','+')+'&size=large'
+def downloadImage(driver,url,query,extra):
+    q=query+extra.replace('&',' ').replace(' ','+')+'&size=large'
     xpath='/html/body/div[1]/div/main/div[2]/div/a[1]/img'
     driver.get(url+q)
 
@@ -48,10 +48,10 @@ def getAllArts(search_queries, audioforms):
             if checkformat(query, formats):
                 print(query)
                 try:
-                    downloadImage(driver,url,query)
+                    downloadImage(driver,url,query[:-4],' album')
                 except:
                     with open('.errors(downloadImage).txt','a+') as f:
-                        f.write(query+'\n')
+                        f.write(query+'not found\n')
                 break
     driver.quit()
 
