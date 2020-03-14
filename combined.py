@@ -1,6 +1,7 @@
 from requests import get
 from stagger import read_tag
 from selenium import webdriver
+from os import listdir
 
 def setArt(song, art):
     mp3=read_tag(song)
@@ -44,6 +45,8 @@ def getAllArts(search_queries, audioforms):
     driver = webdriver.Chrome('chromedriver.exe',chrome_options=options) # Using Chrome to access
     url='https://www.ecosia.org/images?q='
     for query in search_queries:
+        if query+'.jpg' in listdir('downloads/'):
+            continue
         for formats in audioforms:
             if checkformat(query, formats):
                 print(query)
