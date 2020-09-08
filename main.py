@@ -6,6 +6,7 @@ files = os.listdir(path)
 audioforms = ['.mp3'] #.mp3 supported
 
 if __name__ == '__main__':
+    print('Total files:',len(files))
     getAllArts(files,audioforms) #getAllArts called
     setArtRunner(path,files,audioforms) #setArtRunner called
     setAlbum(path,files,audioforms) #setAlbum called

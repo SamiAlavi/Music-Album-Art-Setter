@@ -26,12 +26,12 @@ def saveImage(iname,link):
     with open('downloads/'+iname+'.mp3.jpg', 'wb') as f:
         f.write(img_data)
 
-def downloadImage(driver,url,query,extra):
-    q=query+extra.replace('&',' ').replace(' ','+')+'&size=large'
-    xpath='/html/body/div[1]/div/main/div[2]/div/a[1]/img'
+def downloadImage(driver,url,query):
+    q=query.replace('&','').replace(' ','+')+' album&size=large'
+    cssselect = 'a.image-result'
     driver.get(url+q)
 
-    link = driver.find_element_by_xpath(xpath).get_attribute("src")
+    link = driver.find_element_by_css_selector(cssselect).get_attribute('href')
     #print(link)
     saveImage(query,link)
 
@@ -44,22 +44,23 @@ def getAllArts(search_queries, audioforms):
     
     driver = webdriver.Chrome('chromedriver.exe',chrome_options=options) # Using Chrome to access
     url='https://www.ecosia.org/images?q='
-    for query in search_queries:
+    for i in range(len(search_queries)):
+        query = search_queries[i]
         if query+'.jpg' in listdir('downloads/'):
             continue
         for formats in audioforms:
             if checkformat(query, formats):
                 print(query)
                 try:
-                    downloadImage(driver,url,query[:-4],' album')
+                    downloadImage(driver,url,query[:-4])
                 except:
                     with open('.errors(downloadImage).txt','a+') as f:
-                        f.write(query+'not found\n')
+                        f.write(query+' not found\n')
                 break
     driver.quit()
 
 def setAlbum(path,music,audioforms):
-    with open("##COUNT.txt", "r") as f:
+    with open("#COUNT.txt", "r") as f:
         count=int(f.read())
     
     for i in music:
@@ -71,6 +72,6 @@ def setAlbum(path,music,audioforms):
                 mp3.write()
                 break
         
-    with open("##COUNT.txt", "w") as f:
+    with open("#COUNT.txt", "w") as f:
         f.write(str(count))
 
