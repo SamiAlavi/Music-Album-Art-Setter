@@ -15,7 +15,7 @@ def setDriver():
             'durable_storage': 2}}
     options = webdriver.ChromeOptions()    
     options.add_experimental_option("prefs", prefs)
-    #options.add_argument('headless') ##remove this to visualize the automation
+    options.add_argument('headless') ##remove this to visualize the automation
     driver = webdriver.Chrome('chromedriver.exe',options=options) # Using Chrome to access
     return driver
 
@@ -44,7 +44,6 @@ if __name__ == '__main__':
     if flag1=='y':
         getAllArts(driver,files,audioforms) #getAllArts called
         setArtRunner(path,files,audioforms) #setArtRunner called
-        pass
     
     if flag2=='y':
         getAllLyrics(driver,files,audioforms) #getAllLyrics called
@@ -53,4 +52,3 @@ if __name__ == '__main__':
 
     if flag3=='y':
         setAlbum(path,files,audioforms) #setAlbum called
-        pass
