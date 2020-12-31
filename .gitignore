@@ -1,0 +1,7 @@
+downloads/images/*
+downloads/lyrics/*
+Music/*
+
+!downloads/images/.gitkeep 
+!downloads/lyrics/.gitkeep
+!Music/.gitkeep
