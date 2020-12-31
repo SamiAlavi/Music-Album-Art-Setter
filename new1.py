@@ -4,6 +4,8 @@ from stagger import read_tag
 from os import listdir
 from eyed3 import load
 
+headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
+    
 def checkformat(query, formats):
     return query.lower().endswith(formats)
 
@@ -26,17 +28,17 @@ def setArtRunner(path,files,audioforms):
 
 #------------------GET ALBUM ART ------------------#
 def saveImage(iname,link):
-    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
+    global headers
     img_data = requests.get(link, headers=headers).content
     with open(f'downloads/images/{iname}.jpg', 'wb') as f:
         f.write(img_data)
 
 def downloadImage(url,query):
-    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
+    global headers
     try:
         q=query[:-4].replace('&','').replace(' ','+')+' album&size=large'
         soup = requests.get(url+q, headers=headers).content
-        soup = BeautifulSoup(r, "html.parser")
+        soup = BeautifulSoup(soup, "html.parser")
         link = soup.find('a', class_='image-result__link')['href']
         saveImage(query,link)
     except:
@@ -100,29 +102,22 @@ def writelyrics(song,lyrics):
             f.write(lyrics)
 
 def downloadLyrics(url,song):
+    global headers
     flag = True
-    geniuss = 'genius'
     azlyricss = 'azlyrics.com/lyrics'
     
     q = song[:-4].replace(' ','+').replace('&','%26')+' lyrics'
-    driver.get(url+q)
+    soup = requests.get(url+q, headers=headers).content
+    soup = BeautifulSoup(soup, "html.parser")
+    elems = soup.find_all('a', class_='result-url js-result-url')
 
-    elems = driver.find_elements_by_css_selector('a.result-title')
     for elem in elems:
-        link = elem.get_attribute("href")
-        if geniuss in link:
-            driver.get(link)
-            try:
-                elem = driver.find_element_by_css_selector('div.jgQsqn')
-            except:
-                xpath = '/html/body/routable-page/ng-outlet/song-page/div/div/div[2]/div[1]/div/defer-compile[1]/lyrics/div/div/section/p'
-                elem = driver.find_element_by_xpath(xpath)
-            writelyrics(song,elem.text)
-            flag = False
-            break
-        elif azlyricss in link:
-            driver.get(link)
-            elem = driver.find_element_by_xpath('/html/body/div[2]/div/div[2]/div[5]')
+        link = elem['href']
+        if azlyricss in link:
+            soup = requests.get(link, headers=headers).content
+            soup = BeautifulSoup(soup, "html.parser")
+            divs = soup.find_all('div', class_='text-center')[3]
+            elem = divs.find_all('div')[5]
             writelyrics(song,elem.text)
             flag = False
             break
@@ -131,8 +126,6 @@ def downloadLyrics(url,song):
             f.write(song+'\n')
 
 def getAllLyrics(files,audioforms):
-    azlyricss = 'azlyrics.com/lyrics'
-    geniuss = 'genius'
     url='https://www.ecosia.org/search?q='
 
     for i in range(len(files)):
@@ -142,5 +135,5 @@ def getAllLyrics(files,audioforms):
         for formats in audioforms:
             if checkformat(query, formats):
                 print(f'{i+1}) {query}')
-                downloadLyrics(driver,url,query)
+                downloadLyrics(url,query)
                 break
