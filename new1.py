@@ -77,9 +77,9 @@ def setAlbum(path,music,audioforms):
 #----------------- SET LYRICS ------------------#
 def setLyrics(song, fname):
     try:
-        with open(fname,'r') as f:
+        with open(fname,'r', encoding='utf-8') as f:
             lyrics = f.read()
-        mp3=load(song)
+        mp3 = load(song)
         tagg = mp3.tag
         tagg.lyrics.set(lyrics)
         tagg.save(song)
@@ -105,20 +105,30 @@ def downloadLyrics(url,song):
     global headers
     flag = True
     azlyricss = 'azlyrics.com/lyrics'
+    letssingit = 'letssingit.com/'
+    lyricsbox = 'lyricsbox.com/'
+    nott = '/lyrics'
     
-    q = song[:-4].replace(' ','+').replace('&','%26')+' lyrics'
+    q = song[:-4].replace(' ','+').replace('&','%26')+'+lyrics'
     soup = requests.get(url+q, headers=headers).content
     soup = BeautifulSoup(soup, "html.parser")
     elems = soup.find_all('a', class_='result-url js-result-url')
-
+    
     for elem in elems:
         link = elem['href']
         if azlyricss in link:
             soup = requests.get(link, headers=headers).content
             soup = BeautifulSoup(soup, "html.parser")
             divs = soup.find_all('div', class_='text-center')[3]
-            elem = divs.find_all('div')[5]
-            writelyrics(song,elem.text)
+            lyrics = divs.find_all('div')[5].text.strip()
+            writelyrics(song,lyrics)
+            flag = False
+            break
+        elif (letssingit in link or lyricsbox in link) and link[-7:]!=nott:
+            soup = requests.get(link, headers=headers).content
+            soup = BeautifulSoup(soup, "html.parser")
+            lyrics = soup.find("div", {"id": "lyrics"}).text.strip()
+            writelyrics(song,lyrics)
             flag = False
             break
     if flag:
@@ -127,7 +137,6 @@ def downloadLyrics(url,song):
 
 def getAllLyrics(files,audioforms):
     url='https://www.ecosia.org/search?q='
-
     for i in range(len(files)):
         query = files[i]
         if query+'.txt' in listdir('downloads/lyrics/'):
