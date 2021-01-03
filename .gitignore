@@ -1,0 +1,5 @@
+Music/*
+Music/downloads/*
+__pycache__/*
+
+!Music/.gitkeep

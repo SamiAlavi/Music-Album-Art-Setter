@@ -1,145 +1,161 @@
-from requests import get
+import requests
+from bs4 import BeautifulSoup
 from stagger import read_tag
 from os import listdir
 from eyed3 import load
+import os
 
-def checkformat(query, formats):
-    return query.lower().endswith(formats)
+headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
+PATH_MUSIC = None
+PATH_IMAGES = None
+PATH_LYRICS = None
+PATH_ERRORS = None
+
+def createDir(paths):
+    for path in paths:
+        if not os.path.exists(path):
+            os.makedirs(path)
+
+def setPaths(path):
+    global PATH_MUSIC, PATH_IMAGES, PATH_LYRICS, PATH_ERRORS
+    PATH_MUSIC = path
+    PATH_ERRORS = f'{path}/downloads'
+    PATH_IMAGES = f'{path}/downloads/images'
+    PATH_LYRICS = f'{path}/downloads/lyrics'
+    createDir([PATH_ERRORS, PATH_IMAGES, PATH_LYRICS])
 
 #------------------SET ALBUM ART ------------------#
 def setArt(song, art):
+    global PATH_IMAGES, PATH_ERRORS
     try:
         mp3=read_tag(song)
         mp3.picture=art
         mp3.write()
     except:
-        with open('downloads/errors(setArt).txt','a+') as f:
-            f.write(f'{song} not found in downloads/images\n')
+        with open(f'{PATH_ERRORS}/errors(setArt).txt','a+') as f:
+            f.write(f'{song} not found in {PATH_IMAGES}\n')
 
-def setArtRunner(path,files,audioforms):
+def setArtRunner(files):
+    global PATH_MUSIC, PATH_IMAGES
     for filename in files:
-        for formats in audioforms:
-            if checkformat(filename, formats):
-                setArt(path+filename,f'downloads/images/{filename}.jpg')
-                break
+        setArt(f'{PATH_MUSIC}/{filename}',f'{PATH_IMAGES}/{filename}.jpg')
 
 #------------------GET ALBUM ART ------------------#
-def saveImage(iname,link):
-    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
-    img_data = get(link, headers=headers).content
-    with open(f'downloads/images/{iname}.jpg', 'wb') as f:
+def saveImage(sname, link):
+    global headers, PATH_IMAGES
+    img_data = requests.get(link, headers=headers).content
+    with open(f'{PATH_IMAGES}/{sname}.jpg', 'wb') as f:
         f.write(img_data)
 
-def downloadImage(driver,url,query):
+def downloadImage(url, query):
+    global headers, PATH_ERRORS
     try:
         q=query[:-4].replace('&','').replace(' ','+')+' album&size=large'
-        driver.get(url+q)
-
-        link = driver.find_element_by_css_selector('a.image-result').get_attribute('href')
-        #print(link)
+        soup = requests.get(url+q, headers=headers).content
+        soup = BeautifulSoup(soup, "html.parser")
+        link = soup.find('a', class_='image-result__link')['href']
         saveImage(query,link)
+        print()
     except:
-        with open('downloads/errors(downloadImage).txt','a+') as f:
+        print('(ERROR)')
+        with open(f'{PATH_ERRORS}/errors(downloadImage).txt','a+') as f:
             f.write(query+' not found\n')
 
-def getAllArts(driver,search_queries, audioforms):
+def getAllArts(search_queries):
+    global PATH_IMAGES
     url='https://www.ecosia.org/images?q='
     for i in range(len(search_queries)):
         query = search_queries[i]
-        if query+'.jpg' in listdir('downloads/images/'):
+        if query+'.jpg' in listdir(f'{PATH_IMAGES}/'):
             continue
-        for formats in audioforms:
-            if checkformat(query, formats):
-                print(f'{i+1}) {query}')
-                downloadImage(driver,url,query)
-                break
+        print(f'{i+1}) {query}', end=' ')
+        downloadImage(url,query)
             
 #------------------ ALBUM NUMBER ------------------#            
-def setAlbum(path,music,audioforms):
+def setAlbum(files):
+    global PATH_MUSIC
     with open("#COUNT.txt", "r") as f:
         count=int(f.read())
     
-    for i in music:
-        for formats in audioforms:
-            if checkformat(i, formats):
-                count+=1
-                mp3=read_tag(path+i)
-                mp3.album=str(count)
-                mp3.write()
-                break
+    for filename in files:
+        count+=1
+        mp3=read_tag(f'{PATH_MUSIC}/{filename}')
+        mp3.album=str(count)
+        mp3.write()
         
     with open("#COUNT.txt", "w") as f:
         f.write(str(count))
 
 #----------------- SET LYRICS ------------------#
 def setLyrics(song, fname):
+    global PATH_LYRICS, PATH_ERRORS
     try:
-        with open(fname,'r') as f:
+        with open(fname,'r', encoding='utf-8') as f:
             lyrics = f.read()
-        mp3=load(song)
+        mp3 = load(song)
         tagg = mp3.tag
         tagg.lyrics.set(lyrics)
         tagg.save(song)
     except:
-        with open('downloads/errors(setLyrics).txt','a+') as f:
-            f.write(f'{song} not found in downloads/lyrics\n')
+        with open(f'{PATH_ERRORS}/errors(setLyrics).txt','a+') as f:
+            f.write(f'{song} not found in {PATH_LYRICS}\n')
 
-def setLyricsRunner(path,files,audioforms):
+def setLyricsRunner(files):
+    global PATH_MUSIC, PATH_LYRICS
     for filename in files:
-        for formats in audioforms:
-            if checkformat(filename, formats):
-                setLyrics(path+filename,f'downloads/lyrics/{filename}.txt')
-                break
+        setLyrics(f'{PATH_MUSIC}/{filename}',f'{PATH_LYRICS}/{filename}.txt')
     
 #------------------GET LYRICS ------------------#
-def writelyrics(song,lyrics):
+def writelyrics(song, lyrics):
+    global PATH_LYRICS
     if lyrics is not None:
         lyrics = lyrics.replace('’',"'")
-        with open(f'downloads/lyrics/{song}.txt','w', encoding='utf-8') as f:
+        with open(f'{PATH_LYRICS}/{song}.txt','w', encoding='utf-8') as f:
             f.write(lyrics)
 
-def downloadLyrics(driver,url,song):
+def downloadLyrics(url, query):
+    global headers, PATH_ERRORS
     flag = True
-    geniuss = 'genius'
     azlyricss = 'azlyrics.com/lyrics'
+    letssingit = 'letssingit.com/'
+    lyricsbox = 'lyricsbox.com/'
+    nott = '/lyrics'
     
-    q = song[:-4].replace(' ','+').replace('&','%26')+' lyrics'
-    driver.get(url+q)
-
-    elems = driver.find_elements_by_css_selector('a.result-title')
+    q = query[:-4].replace(' ','+').replace('&','%26')+'+lyrics'
+    soup = requests.get(url+q, headers=headers).content
+    soup = BeautifulSoup(soup, "html.parser")
+    elems = soup.find_all('a', class_='result-url js-result-url')
+    
     for elem in elems:
-        link = elem.get_attribute("href")
-        if geniuss in link:
-            driver.get(link)
-            try:
-                elem = driver.find_element_by_css_selector('div.jgQsqn')
-            except:
-                xpath = '/html/body/routable-page/ng-outlet/song-page/div/div/div[2]/div[1]/div/defer-compile[1]/lyrics/div/div/section/p'
-                elem = driver.find_element_by_xpath(xpath)
-            writelyrics(song,elem.text)
+        link = elem['href']
+        if azlyricss in link:
+            soup = requests.get(link, headers=headers).content
+            soup = BeautifulSoup(soup, "html.parser")
+            divs = soup.find_all('div', class_='text-center')[3]
+            lyrics = divs.find_all('div')[5].text.strip()
+            writelyrics(query,lyrics)
             flag = False
+            print()
             break
-        elif azlyricss in link:
-            driver.get(link)
-            elem = driver.find_element_by_xpath('/html/body/div[2]/div/div[2]/div[5]')
-            writelyrics(song,elem.text)
+        elif (letssingit in link or lyricsbox in link) and link[-7:]!=nott:
+            soup = requests.get(link, headers=headers).content
+            soup = BeautifulSoup(soup, "html.parser")
+            lyrics = soup.find("div", {"id": "lyrics"}).text.strip()
+            writelyrics(query,lyrics)
             flag = False
+            print()
             break
     if flag:
-        with open('downloads/errors(getLyrics).txt', 'a', encoding='utf-8') as f:
-            f.write(song+'\n')
+        print('(ERROR)')
+        with open(f'{PATH_ERRORS}/errors(getLyrics).txt', 'a', encoding='utf-8') as f:
+            f.write(query+'\n')
 
-def getAllLyrics(driver,files,audioforms):
-    azlyricss = 'azlyrics.com/lyrics'
-    geniuss = 'genius'
+def getAllLyrics(files):
+    global PATH_LYRICS
     url='https://www.ecosia.org/search?q='
-
     for i in range(len(files)):
         query = files[i]
-        if query+'.txt' in listdir('downloads/lyrics/'):
+        if query+'.txt' in listdir(f'{PATH_LYRICS}/'):
             continue
-        for formats in audioforms:
-            if checkformat(query, formats):
-                print(f'{i+1}) {query}')
-                downloadLyrics(driver,url,query)
-                break
+        print(f'{i+1}) {query}', end=' ')
+        downloadLyrics(url,query)
