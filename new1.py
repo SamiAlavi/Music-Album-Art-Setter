@@ -6,8 +6,6 @@ from eyed3 import load
 
 headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
     
-def checkformat(query, formats):
-    return query.lower().endswith(formats)
 
 #------------------SET ALBUM ART ------------------#
 def setArt(song, art):
@@ -21,10 +19,7 @@ def setArt(song, art):
 
 def setArtRunner(path,files,audioforms):
     for filename in files:
-        for formats in audioforms:
-            if checkformat(filename, formats):
-                setArt(path+filename,f'downloads/images/{filename}.jpg')
-                break
+        setArt(path+filename,f'downloads/images/{filename}.jpg')
 
 #------------------GET ALBUM ART ------------------#
 def saveImage(iname,link):
@@ -51,11 +46,8 @@ def getAllArts(search_queries, audioforms):
         query = search_queries[i]
         if query+'.jpg' in listdir('downloads/images/'):
             continue
-        for formats in audioforms:
-            if checkformat(query, formats):
-                print(f'{i+1}) {query}')
-                downloadImage(url,query)
-                break
+        print(f'{i+1}) {query}')
+        downloadImage(url,query)
             
 #------------------ ALBUM NUMBER ------------------#            
 def setAlbum(path,music,audioforms):
@@ -63,13 +55,10 @@ def setAlbum(path,music,audioforms):
         count=int(f.read())
     
     for i in music:
-        for formats in audioforms:
-            if checkformat(i, formats):
-                count+=1
-                mp3=read_tag(path+i)
-                mp3.album=str(count)
-                mp3.write()
-                break
+        count+=1
+        mp3=read_tag(path+i)
+        mp3.album=str(count)
+        mp3.write()
         
     with open("#COUNT.txt", "w") as f:
         f.write(str(count))
@@ -89,10 +78,7 @@ def setLyrics(song, fname):
 
 def setLyricsRunner(path,files,audioforms):
     for filename in files:
-        for formats in audioforms:
-            if checkformat(filename, formats):
-                setLyrics(path+filename,f'downloads/lyrics/{filename}.txt')
-                break
+        setLyrics(path+filename,f'downloads/lyrics/{filename}.txt')
     
 #------------------GET LYRICS ------------------#
 def writelyrics(song,lyrics):
@@ -141,8 +127,5 @@ def getAllLyrics(files,audioforms):
         query = files[i]
         if query+'.txt' in listdir('downloads/lyrics/'):
             continue
-        for formats in audioforms:
-            if checkformat(query, formats):
-                print(f'{i+1}) {query}')
-                downloadLyrics(url,query)
-                break
+        print(f'{i+1}) {query}')
+        downloadLyrics(url,query)

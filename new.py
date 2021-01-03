@@ -1,13 +1,18 @@
 import os
 from new1 import getAllArts, setArtRunner, getAllLyrics, setLyricsRunner, setAlbum
 
-os.chdir('src/')
-path='Music/'
-files = os.listdir(path)    
-audioforms = ['.mp3'] #.mp3 supported
-options = ['n','y']
+def checkformat(query, formats):
+    return query.lower().endswith(formats)
 
-if __name__ == '__main__':
+if __name__ == '__main__':    
+    os.chdir('src/')
+    path='Music/'
+    files = os.listdir(path)    
+    audioforms = ['.mp3'] #.mp3 supported
+    options = ['n','y']
+
+    files = [filename for filename in files for format in audioforms if checkformat(filename, format)]
+
     # options
     flag1 = input('Find album arts? (n/Y) ').lower()
     while flag1 not in options:
@@ -21,15 +26,18 @@ if __name__ == '__main__':
     while flag3 not in options:
         flag3 = input('Rename album names? (N/y) ').lower()
         
-    print('Total files:',len(files)-1)
+    print('\nTotal files:',len(files))
     
     if flag1=='y':
+        print('\nGetting album arts')
         getAllArts(files,audioforms) #getAllArts called
         setArtRunner(path,files,audioforms) #setArtRunner called
     
     if flag2=='y':
+        print('\nGetting lyrics')
         getAllLyrics(files,audioforms) #getAllLyrics called
         setLyricsRunner(path,files,audioforms) #setLyricsRunner called
 
     if flag3=='y':
+        print('\nGetting album names')
         setAlbum(path,files,audioforms) #setAlbum called

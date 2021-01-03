@@ -1,6 +1,6 @@
-downloads/images/*
-downloads/lyrics/*
+downloads/*
 Music/*
+__pycache__/*
 
 !downloads/images/.gitkeep 
 !downloads/lyrics/.gitkeep
