@@ -4,8 +4,10 @@ from combined import getAllArts, setArtRunner, getAllLyrics, setLyricsRunner, se
 def checkformat(query, formats):
     return query.lower().endswith(formats)
 
-if __name__ == '__main__':    
-    os.chdir('src/')
+if __name__ == '__main__':  
+    if 'src' in os.listdir():
+        os.chdir('src/')        
+        
     PATH_MUSIC='Music'
     setPaths(PATH_MUSIC)
     files = os.listdir(PATH_MUSIC)    
