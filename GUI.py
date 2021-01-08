@@ -1,104 +1,143 @@
-from tkinter import filedialog
 from tkinter import *
-from tkinter.ttk import Progressbar
-from shutil import copy2
-from time import sleep
+from tkinter import messagebox
+from tkinter import filedialog
 ########################################################################
 import os
-from combined import setArt, setArtRunner, saveImage, downloadImage
-from combined import checkformat, getAllArts, setAlbum
+from combinedGUI import getAllArts, setArtRunner, getAllLyrics, setLyricsRunner
+from combinedGUI import setPaths, setAlbum, setupQuit, resource_path
 ########################################################################
 
-root = Tk()
+def checkformat(query, format):
+    return query.lower().endswith(format)
 
 class GUI:
+    previous = None
+    audioforms = ['.mp3'] #.mp3 supported
+    
+    def on_enter(self,e):
+        self.previous = e.widget['background']
+        if not self.previous=='black':
+            e.widget['background'] = '#0000b2'
+    def on_leave(self,e):
+        e.widget['background'] = self.previous
+        
+    def toggle(self):
+        if self.t_btn.config('text')[-1] == 'True':
+            self.t_btn.config(text='False')
+        else:
+            self.t_btn.config(text='True')
+
+    def getFiles(self):
+        self.files = [filename for filename in os.listdir(self.PATH_MUSIC) for format in self.audioforms if checkformat(filename, format)]
+        return len(self.files)
+
     def browseButton(self):
-        files =  filedialog.askopenfilenames(title = "Select file",filetypes = (("mp3 files","*.mp3"),))
-        if len(files):
-            self.copy(root.tk.splitlist(files),self.path)
+        self.PATH_MUSIC =  filedialog.askdirectory()
+        if self.PATH_MUSIC:
             self.changeLabel()
-
-    def browseDriver(self):
-        files =  filedialog.askopenfilename(title = "Select file",filetypes = (("exe files","*.exe"),))
-        if len(files):
-            self.copy([files],os.getcwd()+'/')
-
-    def copy(self,files,path):
-        for file in files:
-            copy2(file,path+os.path.split(file)[1])
+        else:
+            self.files = list()
             
     def changeLabel(self):
-        t=''
-        self.files = os.listdir(self.path) 
-        for i in range(1,len(self.files)):
-            t+='\n'+self.files[i]
-        self.label2.configure(text=t)
-        root.after(1000, self.changeLabel)
-        
-    def changeLB(self): 
-        self.flag = 'chromedriver.exe' in os.listdir()
-        if self.flag:
-            self.label1.configure(text='chromedriver.exe found',
-                           foreground="white",background="green")
-            self.button1.configure(text="Browse Music", command=lambda: self.browseButton())
-            self.button2.configure(state=NORMAL, command=lambda: self.runCombined())
+        self.label1.configure(text=f"Path: {self.PATH_MUSIC}")
+        self.listbox.delete(0,END)
+        length = self.getFiles()
+        temp1='     '
+        if length:
+            setPaths(self.PATH_MUSIC)
+            for i in range(length):
+                t=f"\n{temp1}{i+1}) {self.files[i]}"
+                self.listbox.insert(END, t) 
+            self.button2.configure(state=NORMAL,fg='white', bg='blue')
         else:
-            self.label1.configure(text='chromedriver.exe not found',
-                           foreground="red",background="black")
-            self.button1.configure(text="Browse Driver", command=lambda: self.browseDriver())
-            self.button2.configure(state=DISABLED)
-        root.after(1000, self.changeLB) #it'll call itself continuously       
+            t = 'No music files found'
+            self.button2.configure(state=DISABLED, bg='black')
+        #root.after(1000, self.changeLabel)
 
-    def runCombined(self):
-        self.button2.configure(state=DISABLED)
-        label = Label(master=self.frame1,text='Getting all album arts')
-        progress = Progressbar(master=self.frame1, orient = HORIZONTAL, 
-              length = 100, mode = 'determinate')
-        label.pack(fill=X,side = TOP)
-        progress.pack(fill=X,side = TOP)
-        
-        progress['value'] = 10
-        root.update_idletasks()
-        
-        getAllArts(self.files,self.audioforms) #getAllArts called
-        progress['value'] = 50
-        label['text']='Setting all album arts'
-        root.update_idletasks() 
-        
-
-        setArtRunner(self.path,self.files,self.audioforms) #setArtRunner called
-        progress['value'] = 75
-        label['text']='Setting album numbers'
-        root.update_idletasks()
-        
-        setAlbum(self.path,self.files,self.audioforms) #setAlbum called
-        progress['value'] = 100
-        root.update_idletasks()         
-
-        label.destroy()
-        progress.destroy()
+    def setupOptions(self):
+        self.flag1, self.flag2, self.flag3 = IntVar(),IntVar(),IntVar()
+        c1 = Checkbutton(self.frame1, text="Find album arts?", variable=self.flag1, onvalue=1, offvalue=0)
+        c2 = Checkbutton(self.frame1, text="Find music lyrics?", variable=self.flag2, onvalue=1, offvalue=0)
+        c3 = Checkbutton(self.frame1, text="Rename album names?", variable=self.flag3, onvalue=1, offvalue=0)
+        c1.pack(anchor=W, ipadx=10)
+        c2.pack(anchor=W, ipadx=10)
+        c3.pack(anchor=W, ipadx=10)
     
-    def __init__(self):
-        self.flag=False
+    def runCombined(self, event=None):
+        if not len(self.files):
+            return
+        # options
+        options = self.flag1.get() or self.flag2.get() or self.flag3.get()
+        if not options:    
+            messagebox.showinfo('', "No option selected")
+            
+        if self.flag1.get(): 
+            getAllArts(self.files) #getAllArts called
+            setArtRunner(self.files) #setArtRunner called  
         
-        self.label1 = Label(master=root,height=2)
-        self.label1.pack(fill=X)
-        self.button1 = Button(master=root,text="Browse",height=2)
+        if self.flag2.get(): 
+            getAllLyrics(self.files) #getAllLyrics called
+            setLyricsRunner(self.files) #setLyricsRunner called
+
+        if self.flag3.get():           
+            setAlbum(self.files) #setAlbum called
+     
+        #messagebox.showinfo('', 'Completed')
+        
+    def __init__(self):   
+        
+        self.frame1=Frame(root) # Frame 1
+        
+        self.button1 = Button(self.frame1,text="Browse Music",height=2,
+                              fg='white', bg='blue',
+                              command = self.browseButton)        
+        self.label1 = Label(self.frame1,text=f"Path: ",height=2,
+                            fg='red')
+        self.button2 = Button(self.frame1,text="Run",height=2,
+                              bg='black',state=DISABLED, command=self.runCombined)
+        
         self.button1.pack(fill=X)
-
-        self.frame1=Frame(master=root)        
-        self.path='Music/'  
-        self.audioforms = ['.mp3'] #.mp3 supported
+        self.label1.pack(fill=X)
         
-        self.label2 = Label(master=self.frame1)
-        self.button2 = Button(master=self.frame1,text="Run",height=2,
-                              fg='white',bg='blue')
-        self.frame1.pack(fill=BOTH, expand=True)
-        self.button2.pack(fill=X,side = BOTTOM)
-        self.label2.pack(fill=BOTH, expand=True,side = BOTTOM)
+        self.setupOptions() # options
+        
+        self.frame2=Frame(self.frame1) # Frame 2        
+        self.listbox = Listbox(self.frame2)
+        scrollbar = Scrollbar(self.frame2)
+        self.listbox.config(yscrollcommand = scrollbar.set)
+        scrollbar.config(command = self.listbox.yview) 
 
-        self.changeLB()
-        self.changeLabel()
+        scrollbar.pack(fill=BOTH, side=RIGHT)
+        self.listbox.pack(fill=BOTH, side=BOTTOM)        
+        self.button2.pack(fill=BOTH, side=BOTTOM)
+        self.frame2.pack(fill=BOTH)
+        self.frame1.pack(fill=BOTH)
+
+        self.button1.bind("<Enter>", self.on_enter)
+        self.button1.bind("<Leave>", self.on_leave)
+        self.button2.bind("<Enter>", self.on_enter)
+        self.button2.bind("<Leave>", self.on_leave)
+
+        self.browseButton()
+        
+        # setting for calling function when pressed KEY
+        root.bind("<Return>", self.runCombined)
+
+def setupRoot():
+    root = Tk()
+    root.iconbitmap(resource_path('music.ico'))
+    root.title('Music Album Art Setter')
+    root.geometry('500x300')
+    root.lift()
+    root.focus_force()
+    title = 'Quit?'
+    text = 'Are you sure you want to quit?'
+    setupQuit(root, title, text)
+    return root
+
+if 'src' in os.listdir():
+    os.chdir('src')
+
+root = setupRoot()
 gui=GUI()
-
-mainloop()
+root.mainloop()
