@@ -8,7 +8,7 @@ from stagger import read_tag
 from os import listdir
 from eyed3 import load
 import os
-from time import sleep
+#from time import sleep
 ########################################################################
 
 headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
@@ -29,24 +29,36 @@ def createDir(paths):
 def setPaths(path):
     global PATH_MUSIC, PATH_IMAGES, PATH_LYRICS, PATH_ERRORS
     PATH_MUSIC = path
-    PATH_ERRORS = f'{path}/downloads'
+    PATH_ERRORS = f'{path}/downloads'   
     PATH_IMAGES = f'{path}/downloads/images'
     PATH_LYRICS = f'{path}/downloads/lyrics'
     createDir([PATH_ERRORS, PATH_IMAGES, PATH_LYRICS])
 
-def changeProgress(percentage,file):
+def changeProgress(i,length,file):
     global root, progress, label1, value
-    val = percentage*100
-    progress['value'] = val
+    progress['value'] = (i/length)*100
     label1.configure(text=file)
-    value.configure(text=f'{round(val,2)}%')
+    value.configure(text=f'{i} / {length}')
     root.update()
 
+def setupQuit(root, title, text):
+    root.protocol('WM_DELETE_WINDOW',
+                  lambda window=root,title=title,text=text : quitDialog(window,title,text))
+
+def quitDialog(window,title,text):
+    if messagebox.askokcancel(title, text,icon="warning"):
+        window.destroy()
+        
 def open_dialog(text):
     global root, progress, label1, value
+    # set root window
     root = Tk()
+    root.iconbitmap('music.ico')
     root.title('Info')
     root.geometry('500x100')
+    root.resizable(0,0)
+    setupQuit(root,'Close?','Process is running\nAre you sure you want to close?')
+    
     Label(root,text=text,height=2, fg='red').pack(padx=10)
     label1 = Label(root,text='',height=2)
     progress = Progressbar(root, orient=HORIZONTAL, 
@@ -90,9 +102,9 @@ def downloadImage(url, query):
         soup = BeautifulSoup(soup, "html.parser")
         link = soup.find('a', class_='image-result__link')['href']
         saveImage(query,link)
-        print()
+        #print()
     except:
-        print('(ERROR)')
+        #print('(ERROR)')
         with open(f'{PATH_ERRORS}/errors(downloadImage).txt','a+') as f:
             f.write(query+' not found\n')
 
@@ -103,26 +115,30 @@ def getAllArts(files):
     url='https://www.ecosia.org/images?q='
     for i in range(length):
         query = files[i]
-        changeProgress((i+1)/length,files[i])
+        changeProgress(i,length,files[i])
         #sleep(1)
         if query+'.jpg' in listdir(f'{PATH_IMAGES}/'):
             continue
-        print(f'{i+1}) {query}', end=' ')
+        #print(f'{i+1}) {query}', end=' ')
         downloadImage(url,query)
     root.destroy()
             
 #------------------ ALBUM NUMBER ------------------#            
 def setAlbum(files):
     global PATH_MUSIC
+    length = len(files)
+    open_dialog('Setting album names')
     with open("#COUNT.txt", "r") as f:
         count=int(f.read())
     
-    for filename in files:
+    for i in range(length):
+        changeProgress(i,length,files[i])
         count+=1
-        mp3=read_tag(f'{PATH_MUSIC}/{filename}')
+        mp3=read_tag(f'{PATH_MUSIC}/{files[i]}')
         mp3.album=str(count)
         mp3.write()
         
+    root.destroy()
     with open("#COUNT.txt", "w") as f:
         f.write(str(count))
 
@@ -175,7 +191,7 @@ def downloadLyrics(url, query):
             lyrics = divs.find_all('div')[5].text.strip()
             writelyrics(query,lyrics)
             flag = False
-            print()
+            #print()
             break
         elif (letssingit in link or lyricsbox in link) and link[-7:]!=nott:
             soup = requests.get(link, headers=headers).content
@@ -183,10 +199,10 @@ def downloadLyrics(url, query):
             lyrics = soup.find("div", {"id": "lyrics"}).text.strip()
             writelyrics(query,lyrics)
             flag = False
-            print()
+            #print()
             break
     if flag:
-        print('(ERROR)')
+        #print('(ERROR)')
         with open(f'{PATH_ERRORS}/errors(getLyrics).txt', 'a', encoding='utf-8') as f:
             f.write(query+'\n')
 
@@ -197,10 +213,10 @@ def getAllLyrics(files):
     url='https://www.ecosia.org/search?q='
     for i in range(length):
         query = files[i]
-        changeProgress((i+1)/length,files[i])
+        changeProgress(i,length,files[i])
         #sleep(1)
         if query+'.txt' in listdir(f'{PATH_LYRICS}/'):
             continue
-        print(f'{i+1}) {query}', end=' ')
+        #print(f'{i+1}) {query}', end=' ')
         downloadLyrics(url,query)
     root.destroy()
