@@ -11,7 +11,7 @@ Music metadata editor which automatically sets album covers, album names and lyr
 5) Run `main.py`
 
 ## For GUI
-1) Download `music_setter.exe` from 
+1) Download `music_setter.exe` from [Releases(v1.0.0)](https://github.com/SamiAlavi/Music-Album-Art-Setter/releases/tag/v1.0.0 "Releases(v1.0.0)") 
 2) Locate your music directory using Browse
 3) Check options that you need (album_art, music_lyrics, album_name)
 4) Click Run
