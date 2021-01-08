@@ -1,9 +1,10 @@
 from tkinter import *
+from tkinter import messagebox
 from tkinter import filedialog
 ########################################################################
 import os
 from combinedGUI import getAllArts, setArtRunner, getAllLyrics, setLyricsRunner
-from combinedGUI import setPaths, setAlbum, setupQuit
+from combinedGUI import setPaths, setAlbum, setupQuit, resource_path
 ########################################################################
 
 def checkformat(query, format):
@@ -124,7 +125,7 @@ class GUI:
 
 def setupRoot():
     root = Tk()
-    root.iconbitmap('music.ico')
+    root.iconbitmap(resource_path('music.ico'))
     root.title('Music Album Art Setter')
     root.geometry('500x300')
     root.lift()

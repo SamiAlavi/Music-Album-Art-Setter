@@ -9,6 +9,7 @@ from os import listdir
 from eyed3 import load
 import os
 from subprocess import call
+import sys
 #from time import sleep
 ########################################################################
 
@@ -21,6 +22,14 @@ root = None
 progress = None
 label1 = None
 value = None
+
+
+def resource_path(relative_path):    
+    try:       
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath('.')
+    return os.path.join(base_path, relative_path)
 
 def createDir():
     global PATH_IMAGES, PATH_LYRICS, PATH_ERRORS
@@ -62,7 +71,7 @@ def open_dialog(text):
     global root, progress, label1, value
     # set root window
     root = Tk()
-    root.iconbitmap('music.ico')
+    root.iconbitmap(resource_path('music.ico'))
     root.title('Info')
     root.geometry('500x100')
     root.resizable(0,0)
