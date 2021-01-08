@@ -8,6 +8,7 @@ from stagger import read_tag
 from os import listdir
 from eyed3 import load
 import os
+from subprocess import call
 #from time import sleep
 ########################################################################
 
@@ -21,10 +22,19 @@ progress = None
 label1 = None
 value = None
 
-def createDir(paths):
-    for path in paths:
+def createDir():
+    global PATH_IMAGES, PATH_LYRICS, PATH_ERRORS
+    for path in [PATH_ERRORS, PATH_IMAGES, PATH_LYRICS]:
         if not os.path.exists(path):
             os.makedirs(path)
+    hideUnhideDir('HIDE')
+
+def hideUnhideDir(command):
+    global PATH_ERRORS
+    if command=='HIDE':
+        call(["attrib", "+H", PATH_ERRORS])
+    elif command=='UNHIDE':
+        call(["attrib", "-H", PATH_ERRORS])        
 
 def setPaths(path):
     global PATH_MUSIC, PATH_IMAGES, PATH_LYRICS, PATH_ERRORS
@@ -32,11 +42,10 @@ def setPaths(path):
     PATH_ERRORS = f'{path}/downloads'   
     PATH_IMAGES = f'{path}/downloads/images'
     PATH_LYRICS = f'{path}/downloads/lyrics'
-    createDir([PATH_ERRORS, PATH_IMAGES, PATH_LYRICS])
 
 def changeProgress(i,length,file):
     global root, progress, label1, value
-    progress['value'] = (i/length)*100
+    progress['value'] = i/length
     label1.configure(text=file)
     value.configure(text=f'{i} / {length}')
     root.update()
@@ -62,7 +71,7 @@ def open_dialog(text):
     Label(root,text=text,height=2, fg='red').pack(padx=10)
     label1 = Label(root,text='',height=2)
     progress = Progressbar(root, orient=HORIZONTAL, 
-              length=400,maximum=100, mode='determinate')
+              length=400,maximum=1, mode='determinate')
     value = Label(root,text='',height=2)
     
     label1.pack(expand=True)
@@ -86,6 +95,7 @@ def setArtRunner(files):
     global PATH_MUSIC, PATH_IMAGES
     for filename in files:
         setArt(f'{PATH_MUSIC}/{filename}',f'{PATH_IMAGES}/{filename}.jpg')
+    hideUnhideDir('UNHIDE')
 
 #------------------GET ALBUM ART ------------------#
 def saveImage(sname, link):
@@ -110,12 +120,13 @@ def downloadImage(url, query):
 
 def getAllArts(files):
     global PATH_IMAGES
+    createDir()
     length = len(files)
     open_dialog('Getting album arts')
     url='https://www.ecosia.org/images?q='
     for i in range(length):
         query = files[i]
-        changeProgress(i,length,files[i])
+        changeProgress(i+1,length,files[i])
         #sleep(1)
         if query+'.jpg' in listdir(f'{PATH_IMAGES}/'):
             continue
@@ -126,21 +137,29 @@ def getAllArts(files):
 #------------------ ALBUM NUMBER ------------------#            
 def setAlbum(files):
     global PATH_MUSIC
+    fname = 'count.txt'
     length = len(files)
     open_dialog('Setting album names')
-    with open("#COUNT.txt", "r") as f:
-        count=int(f.read())
+    try:
+        with open(fname, 'r') as f:
+            count=int(f.read())
+    except:
+        count=0
     
     for i in range(length):
-        changeProgress(i,length,files[i])
+        changeProgress(i+1,length,files[i])
         count+=1
         mp3=read_tag(f'{PATH_MUSIC}/{files[i]}')
         mp3.album=str(count)
         mp3.write()
         
     root.destroy()
-    with open("#COUNT.txt", "w") as f:
-        f.write(str(count))
+    try:
+        with open(fname, 'w') as f:
+            f.write(str(count))
+    except:
+        error = 'Failed to write count.txt\nGive write permissions'        
+        messagebox.showinfo('Error',error,icon="warning")
 
 #----------------- SET LYRICS ------------------#
 def setLyrics(song, fname):
@@ -160,6 +179,7 @@ def setLyricsRunner(files):
     global PATH_MUSIC, PATH_LYRICS
     for filename in files:
         setLyrics(f'{PATH_MUSIC}/{filename}',f'{PATH_LYRICS}/{filename}.txt')
+    hideUnhideDir('UNHIDE')
     
 #------------------GET LYRICS ------------------#
 def writelyrics(song, lyrics):
@@ -208,12 +228,13 @@ def downloadLyrics(url, query):
 
 def getAllLyrics(files):
     global PATH_LYRICS
+    createDir()
     length = len(files)
     open_dialog('Getting lyrics')   
     url='https://www.ecosia.org/search?q='
     for i in range(length):
         query = files[i]
-        changeProgress(i,length,files[i])
+        changeProgress(i+1,length,files[i])
         #sleep(1)
         if query+'.txt' in listdir(f'{PATH_LYRICS}/'):
             continue

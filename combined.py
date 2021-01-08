@@ -4,6 +4,7 @@ from stagger import read_tag
 from os import listdir
 from eyed3 import load
 import os
+from subprocess import call
 
 headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
 PATH_MUSIC = None
@@ -11,18 +12,26 @@ PATH_IMAGES = None
 PATH_LYRICS = None
 PATH_ERRORS = None
 
-def createDir(paths):
-    for path in paths:
+def createDir():
+    global PATH_IMAGES, PATH_LYRICS, PATH_ERRORS
+    for path in [PATH_ERRORS, PATH_IMAGES, PATH_LYRICS]:
         if not os.path.exists(path):
             os.makedirs(path)
+    hideUnhideDir('HIDE')
+
+def hideUnhideDir(command):
+    global PATH_ERRORS
+    if command=='HIDE':
+        call(["attrib", "+H", PATH_ERRORS])
+    elif command=='UNHIDE':
+        call(["attrib", "-H", PATH_ERRORS])        
 
 def setPaths(path):
     global PATH_MUSIC, PATH_IMAGES, PATH_LYRICS, PATH_ERRORS
     PATH_MUSIC = path
-    PATH_ERRORS = f'{path}/downloads'
+    PATH_ERRORS = f'{path}/downloads'   
     PATH_IMAGES = f'{path}/downloads/images'
     PATH_LYRICS = f'{path}/downloads/lyrics'
-    createDir([PATH_ERRORS, PATH_IMAGES, PATH_LYRICS])
 
 #------------------SET ALBUM ART ------------------#
 def setArt(song, art):
@@ -39,6 +48,8 @@ def setArtRunner(files):
     global PATH_MUSIC, PATH_IMAGES
     for filename in files:
         setArt(f'{PATH_MUSIC}/{filename}',f'{PATH_IMAGES}/{filename}.jpg')
+    hideUnhideDir('UNHIDE')
+
 
 #------------------GET ALBUM ART ------------------#
 def saveImage(sname, link):
@@ -61,11 +72,13 @@ def downloadImage(url, query):
         with open(f'{PATH_ERRORS}/errors(downloadImage).txt','a+') as f:
             f.write(query+' not found\n')
 
-def getAllArts(search_queries):
+def getAllArts(files):
     global PATH_IMAGES
+    createDir()
+    length = len(files)
     url='https://www.ecosia.org/images?q='
-    for i in range(len(search_queries)):
-        query = search_queries[i]
+    for i in range(length):
+        query = files[i]
         if query+'.jpg' in listdir(f'{PATH_IMAGES}/'):
             continue
         print(f'{i+1}) {query}', end=' ')
@@ -74,17 +87,26 @@ def getAllArts(search_queries):
 #------------------ ALBUM NUMBER ------------------#            
 def setAlbum(files):
     global PATH_MUSIC
-    with open("#COUNT.txt", "r") as f:
-        count=int(f.read())
+    fname = 'count.txt'
+    length = len(files)
+    try:
+        with open(fname, 'r') as f:
+            count=int(f.read())
+    except:
+        count=0
     
-    for filename in files:
+    for i in range(length):
         count+=1
-        mp3=read_tag(f'{PATH_MUSIC}/{filename}')
+        mp3=read_tag(f'{PATH_MUSIC}/{files[i]}')
         mp3.album=str(count)
         mp3.write()
         
-    with open("#COUNT.txt", "w") as f:
-        f.write(str(count))
+    try:
+        with open(fname, 'w') as f:
+            f.write(str(count))
+    except:
+        error = 'Failed to write count.txt\nGive write permissions'
+        print(error)
 
 #----------------- SET LYRICS ------------------#
 def setLyrics(song, fname):
@@ -104,6 +126,7 @@ def setLyricsRunner(files):
     global PATH_MUSIC, PATH_LYRICS
     for filename in files:
         setLyrics(f'{PATH_MUSIC}/{filename}',f'{PATH_LYRICS}/{filename}.txt')
+    hideUnhideDir('UNHIDE')
     
 #------------------GET LYRICS ------------------#
 def writelyrics(song, lyrics):
@@ -152,8 +175,10 @@ def downloadLyrics(url, query):
 
 def getAllLyrics(files):
     global PATH_LYRICS
+    createDir()
+    length = len(files)
     url='https://www.ecosia.org/search?q='
-    for i in range(len(files)):
+    for i in range(length):
         query = files[i]
         if query+'.txt' in listdir(f'{PATH_LYRICS}/'):
             continue

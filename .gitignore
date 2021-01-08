@@ -1,5 +1,6 @@
 Music/*
 Music/downloads/*
 __pycache__/*
+count.txt
 
 !Music/.gitkeep
