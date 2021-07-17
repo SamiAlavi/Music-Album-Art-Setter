@@ -5,6 +5,7 @@ from os import listdir
 from eyed3 import load
 import os
 from subprocess import call
+from json import loads
 
 headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
 PATH_MUSIC = None
@@ -58,14 +59,16 @@ def saveImage(sname, link):
     with open(f'{PATH_IMAGES}/{sname}.jpg', 'wb') as f:
         f.write(img_data)
 
-def downloadImage(url, query):
+def downloadImage(query):
     global headers, PATH_ERRORS
+    url = 'https://www.bing.com/images/search?q={}&first=1&tsc=ImageBasicHover'
     try:
-        q=query[:-4].replace('&','').replace(' ','+')+' album&size=large'
-        soup = requests.get(url+q, headers=headers).content
-        soup = BeautifulSoup(soup, "html.parser")
-        link = soup.find('a', class_='image-result__link')['href']
-        saveImage(query,link)
+        param=query[:-4].replace('&','%26').replace(' ','%20')
+        html = requests.get(url.format(param), headers=headers).content
+        soup = BeautifulSoup(html, "html.parser")
+        details = soup.find('a', class_='iusc')['m']
+        linkImg = loads(details)['murl']
+        saveImage(query,linkImg)
         print()
     except:
         print('(ERROR)')
@@ -76,13 +79,12 @@ def getAllArts(files):
     global PATH_IMAGES
     createDir()
     length = len(files)
-    url='https://www.ecosia.org/images?q='
     for i in range(length):
         query = files[i]
         if query+'.jpg' in listdir(f'{PATH_IMAGES}/'):
             continue
         print(f'{i+1}) {query}', end=' ')
-        downloadImage(url,query)
+        downloadImage(query)
             
 #------------------ ALBUM NUMBER ------------------#            
 def setAlbum(files):
