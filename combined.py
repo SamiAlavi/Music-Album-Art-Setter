@@ -155,6 +155,12 @@ def writelyrics(song, lyrics):
         with open(f'{PATH_LYRICS}/{song}.txt','w', encoding='utf-8') as f:
             f.write(lyrics)
 
+def getYahooReferrerLink(link):
+    soup = getParseableSoup(link)
+    metaContent = soup.find_all('meta')[-1]['content'] # yahoo uses redirecting
+    referrer = metaContent[7:-1]
+    return referrer
+
 def downloadLyrics(fname):
     global PATH_ERRORS
     url='https://search.yahoo.com/search?p={}%20lyrics'
@@ -170,19 +176,18 @@ def downloadLyrics(fname):
     for elem in elems:
         link = elem['href']
         if azlyrics in link:
-            soup = getParseableSoup(link)
-            metaContent = soup.find_all('meta')[-1]['content'] # yahoo uses redirecting
-            referrer = metaContent[7:-1]
+            referrer = getYahooReferrerLink(link)
             soup = getParseableSoup(referrer)
-            divs = soup.find_all('div', class_='text-center')[3]
-            lyrics = divs.find_all('div')[5].text.strip()
-            writelyrics(fname,lyrics)
+            try:
+                divs = soup.find_all('div', class_='text-center')[3]
+                lyrics = divs.find_all('div')[5].text.strip()
+                writelyrics(fname,lyrics)
+            except:
+                print('(IP Blocked by https://www.azlyrics.com)')
             print()
             return
         elif (letssingit in link or lyricsbox in link) and link[-7:]!=nott:
-            soup = getParseableSoup(link)
-            metaContent = soup.find_all('meta')[-1]['content'] # yahoo uses redirecting
-            referrer = metaContent[7:-1]
+            referrer = getYahooReferrerLink(link)
             soup = getParseableSoup(referrer)
             lyrics = soup.find("div", {"id": "lyrics"}).text.strip()
             writelyrics(fname,lyrics)
