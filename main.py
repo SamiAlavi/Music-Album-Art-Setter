@@ -1,5 +1,5 @@
 import os
-from combined import getAllArts, setArtRunner, getAllLyrics, setLyricsRunner, setAlbum, setPaths
+from combined import setupSession, getAllArts, setArtRunner, getAllLyrics, setLyricsRunner, setAlbum, setPaths
 
 def checkformat(query, formats):
     return query.lower().endswith(formats)
@@ -14,8 +14,6 @@ if __name__ == '__main__':
     audioforms = ['.mp3'] #.mp3 supported
     options = ['n','y']
 
-    files = [filename for filename in files for format in audioforms if checkformat(filename, format)]
-
     # options
     flag1 = input('Find album arts? (n/Y) ').lower()
     while flag1 not in options:
@@ -29,6 +27,8 @@ if __name__ == '__main__':
     while flag3 not in options:
         flag3 = input('Rename album names? (N/y) ').lower()
         
+    setupSession()
+    files = [fname for fname in files for formatt in audioforms if checkformat(fname, formatt)]
     print('\nTotal files:',len(files))
     
     if flag1=='y':

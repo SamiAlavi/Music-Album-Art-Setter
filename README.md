@@ -1,6 +1,19 @@
 # Music-Album-Art-Setter
 Music metadata editor which automatically sets album covers, album names and lyrics for the given mp3 files
 
+Powered by 
+<a href="https://www.bing.com/" target="_blank">
+  <img title="Microsoft Bing" alt="Microsoft Bing" width="150" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Microsoft_Bing_logo.svg/220px-Microsoft_Bing_logo.svg.png"/>
+</a>
+, 
+<a href="https://www.yahoo.com/" target="_blank">
+  <img title="Yahoo" alt="Yahoo" width="100" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Yahoo%21_%282019%29.svg/220px-Yahoo%21_%282019%29.svg.png"/>
+</a>
+, 
+<a href="https://www.azlyrics.com/" target="_blank">
+  <img title="AZLyrics" alt="AZLyrics" width="30" src="https://www.azlyrics.com/az_logo_tr.png"/>
+</a>
+
 ---
 # Instructions
 ### For Script
@@ -17,10 +30,12 @@ Music metadata editor which automatically sets album covers, album names and lyr
 4) Click Run
 5) `Album Arts` will be downloaded in `YOUR_MUSIC_DIR/downloads/images/`
 6) `Song Lyrics` will be downloaded in `YOUR_MUSIC_DIR/downloads/lyrics/`
-7) `Album Names` are currently set using the `.count` file
+7) `Album Names` are currently set using the `count.txt` file
 8) `Errors` can be checked from files created in `YOUR_MUSIC_DIR/downloads/`
 
 ---
 # Future work
 - Get correct `Album Names` from the internet
 - Support for other audio formats
+- Convert from Python3 to Node.js to support Dynamic Javascipt Websites and use [Nightmare](https://github.com/segmentio/nightmare)
+- Get `Album Arts`, `Lyrics`, `Album Names` from API instead of Web Scraping
