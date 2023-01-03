@@ -16,7 +16,9 @@ PATH_ERRORS = None
 
 def setupSession():
     global SESSION
-    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
+        }
     SESSION = requests.Session()
     SESSION.headers = headers
 
@@ -39,14 +41,15 @@ def createDir():
     for path in [PATH_ERRORS, PATH_IMAGES, PATH_LYRICS]:
         if not os.path.exists(path):
             os.makedirs(path)
-    hideUnhideDir('HIDE')
+    hide_directory()    
 
-def hideUnhideDir(command):
+def hide_directory():
     global PATH_ERRORS
-    if command=='HIDE':
-        call(["attrib", "+H", PATH_ERRORS])
-    elif command=='UNHIDE':
-        call(["attrib", "-H", PATH_ERRORS])        
+    call(["attrib", "+H", PATH_ERRORS])
+
+def unhide_directory():
+    global PATH_ERRORS
+    call(["attrib", "-H", PATH_ERRORS])
 
 def setPaths(path):
     global PATH_MUSIC, PATH_IMAGES, PATH_LYRICS, PATH_ERRORS
@@ -56,104 +59,114 @@ def setPaths(path):
     PATH_LYRICS = f'{path}/downloads/lyrics'
 
 #------------------SET ALBUM ART ------------------#
-def setArt(songPath, image):
+def setArt(music_file_path, image_file_path):
     global PATH_ERRORS
     try:
-        mp3=read_tag(songPath)
-        mp3.picture=image
-        mp3.write()
+        music = read_tag(music_file_path)
+        music.picture = image_file_path
+        music.write()
     except:
-        with open(f'{PATH_ERRORS}/errors(setArt).txt','a+') as f:
-            f.write(f'Error setting image of {songPath}\n')
+        set_art_error_file_name = f'{PATH_ERRORS}/errors(setArt).txt'
+        with open(set_art_error_file_name, 'a+') as file:
+            file.write(f'Error setting image of {music_file_path}\n')
 
 def setArtRunner(files):
     global PATH_MUSIC, PATH_IMAGES
-    for fname in files:
-        setArt(f'{PATH_MUSIC}/{fname}',f'{PATH_IMAGES}/{fname}.jpg')
-    hideUnhideDir('UNHIDE')
+    for file_name in files:
+        music_file_path = f'{PATH_MUSIC}/{file_name}'
+        image_file_path = f'{PATH_IMAGES}/{file_name}.jpg'
+        setArt(music_file_path, image_file_path)
+    unhide_directory()
 
 
 #------------------GET ALBUM ART ------------------#
-def saveImage(fname, url):
+def saveImage(file_name, image_url):
     global PATH_IMAGES
-    img_data = getUrlContent(url)
-    with open(f'{PATH_IMAGES}/{fname}.jpg', 'wb') as f:
-        f.write(img_data)
+    img_data = getUrlContent(image_url)
+    image_file_path = f'{PATH_IMAGES}/{file_name}.jpg'
+    with open(image_file_path, 'wb') as file:
+        file.write(img_data)
 
-def downloadImage(fname):
+def downloadImage(file_name):
     global PATH_ERRORS
     url = 'https://www.bing.com/images/search?q={}&first=1&tsc=ImageBasicHover'
     try:
-        param = fname[:-4]
+        param = file_name[:-4]
         soup = getParseableSoup(url, param)
         details = soup.find('a', class_='iusc')['m']
         urlImg = loads(details)['murl']
-        saveImage(fname, urlImg)
+        saveImage(file_name, urlImg)
         print()
     except:
         print('(ERROR)')
-        with open(f'{PATH_ERRORS}/errors(getImage).txt','a+') as f:
-            f.write(fname+' image not found\n')
+        get_image_error_file_name = f'{PATH_ERRORS}/errors(getImage).txt'
+        with open(get_image_error_file_name,'a+') as file:
+            file.write(f'{file_name} image not found\n')
 
-def getAllArts(files):
+def getAllArts(files_names):
     global PATH_IMAGES
     createDir()
-    for i, fname in enumerate(files):
-        if fname+'.jpg' in listdir(f'{PATH_IMAGES}/'):
+    for index, file_name in enumerate(files_names):
+        image_file_name = f'{file_name}.jpg'
+        if image_file_name in listdir(PATH_IMAGES): # prevent re-downloading of images with same names
             continue
-        print(f'{i+1}) {fname}', end=' ')
-        downloadImage(fname)
+        print(f'{index+1}) {file_name}', end=' ')
+        downloadImage(file_name)
             
 #------------------ ALBUM NUMBER ------------------#            
 def setAlbum(files):
     global PATH_MUSIC
-    fnameCount = 'count.txt'
+    count_file_name = 'count.txt'
     try:
-        with open(fnameCount, 'r') as f:
-            count=int(f.read())
+        with open(count_file_name, 'r') as file:
+            count=int(file.read())
     except:
         count=0
     
-    for i, fname in enumerate(files):
+    for index, file_names in enumerate(files):
         count+=1
-        mp3=read_tag(f'{PATH_MUSIC}/{fname}')
-        mp3.album=str(count)
-        mp3.write()
+        music=read_tag(f'{PATH_MUSIC}/{file_names}')
+        music.album=str(count)
+        music.write()
         
     try:
-        with open(fnameCount, 'w') as f:
-            f.write(str(count))
+        with open(count_file_name, 'w') as file:
+            file.write(str(count))
     except:
-        error = 'Failed to write count.txt\nGive write permissions'
+        error = f'Failed to write {count_file_name}\nGive write permissions'
         print(error)
 
 #----------------- SET LYRICS ------------------#
-def setLyrics(songPath, fname):
+def setLyrics(music_file_path, lyrics_file_path):
     global PATH_ERRORS
     try:
-        with open(fname,'r', encoding='utf-8') as f:
-            lyrics = f.read()
-        mp3 = load(songPath)
+        with open(lyrics_file_path,'r', encoding='utf-8') as file:
+            lyrics = file.read()
+        mp3 = load(music_file_path)
         tagg = mp3.tag
         tagg.lyrics.set(lyrics)
-        tagg.save(songPath)
+        tagg.save(music_file_path)
     except:
-        with open(f'{PATH_ERRORS}/errors(setLyrics).txt','a+') as f:
-            f.write(f'Error setting lyrics of {songPath}\n')
+        set_lyrics_error_file_name = f'{PATH_ERRORS}/errors(setLyrics).txt'
+        with open(set_lyrics_error_file_name,'a+') as file:
+            file.write(f'Error setting lyrics of {music_file_path}\n')
 
-def setLyricsRunner(files):
+def setLyricsRunner(files_names):
     global PATH_MUSIC, PATH_LYRICS
-    for fname in files:
-        setLyrics(f'{PATH_MUSIC}/{fname}',f'{PATH_LYRICS}/{fname}.txt')
-    hideUnhideDir('UNHIDE')
+    for file_name in files_names:
+        music_file_path = f'{PATH_MUSIC}/{file_name}'
+        lyrics_file_path = f'{PATH_LYRICS}/{file_name}.txt'
+        setLyrics(music_file_path, lyrics_file_path)
+    unhide_directory()
     
 #------------------GET LYRICS ------------------#
-def writelyrics(song, lyrics):
+def writelyrics(file_name, lyrics):
     global PATH_LYRICS
     if lyrics is not None:
         lyrics = lyrics.replace('’',"'")
-        with open(f'{PATH_LYRICS}/{song}.txt','w', encoding='utf-8') as f:
-            f.write(lyrics)
+        lyrics_file_path = f'{PATH_LYRICS}/{file_name}.txt'
+        with open(lyrics_file_path,'w', encoding='utf-8') as file:
+            file.write(lyrics)
 
 def getYahooReferrerLink(link):
     soup = getParseableSoup(link)
@@ -161,48 +174,50 @@ def getYahooReferrerLink(link):
     referrer = metaContent[7:-1]
     return referrer
 
-def downloadLyrics(fname):
+def downloadLyrics(file_name):
     global PATH_ERRORS
-    url='https://search.yahoo.com/search?p={}%20lyrics'
+    yahoo_search_url='https://search.yahoo.com/search?p={}%20lyrics'
     azlyrics = 'azlyrics.com%2flyrics' # azlyrics temporary blocks IP address
     letssingit = 'letssingit.com%2f'
     lyricsbox = 'lyricsbox.com%2f'
     nott = '%2flyrics'
     
-    param = fname[:-4]
-    soup = getParseableSoup(url, param)
-    elems = soup.find_all('a', class_='ac-algo')
+    param = file_name[:-4]
+    soup = getParseableSoup(yahoo_search_url, param)
+    elements_a = soup.find_all('a', class_='ac-algo')
     
-    for elem in elems:
-        link = elem['href']
-        if azlyrics in link:
-            referrer = getYahooReferrerLink(link)
+    for element in elements_a:
+        href = element['href']
+        if azlyrics in href:
+            referrer = getYahooReferrerLink(href)
             soup = getParseableSoup(referrer)
             try:
                 divs = soup.find_all('div', class_='text-center')[3]
                 lyrics = divs.find_all('div')[5].text.strip()
-                writelyrics(fname,lyrics)
+                writelyrics(file_name,lyrics)
             except:
                 print('(IP Blocked by https://www.azlyrics.com)')
             print()
             return
-        elif (letssingit in link or lyricsbox in link) and link[-7:]!=nott:
-            referrer = getYahooReferrerLink(link)
+        elif (letssingit in href or lyricsbox in href) and href[-7:]!=nott:
+            referrer = getYahooReferrerLink(href)
             soup = getParseableSoup(referrer)
             lyrics = soup.find("div", {"id": "lyrics"}).text.strip()
-            writelyrics(fname,lyrics)
+            writelyrics(file_name,lyrics)
             print()
             return
     
     print('(ERROR)')
-    with open(f'{PATH_ERRORS}/errors(getLyrics).txt', 'a', encoding='utf-8') as f:
-        f.write(fname+' lyrics not found\n')
+    get_lyrics_error_file_name = f'{PATH_ERRORS}/errors(getLyrics).txt'
+    with open(get_lyrics_error_file_name, 'a', encoding='utf-8') as file:
+        file.write(f'{file_name} lyrics not found\n')
 
-def getAllLyrics(files):
+def getAllLyrics(files_names):
     global PATH_LYRICS
     createDir()
-    for i, fname in enumerate(files):
-        if fname+'.txt' in listdir(f'{PATH_LYRICS}/'):
+    for index, file_name in enumerate(files_names):
+        lyrics_file_name = f'{file_name}.txt'
+        if lyrics_file_name in listdir(PATH_LYRICS): # prevent re-downloading of lyrics with same names
             continue
-        print(f'{i+1}) {fname}', end=' ')
-        downloadLyrics(fname)
+        print(f'{index+1}) {file_name}', end=' ')
+        downloadLyrics(file_name)
