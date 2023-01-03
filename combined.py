@@ -65,10 +65,10 @@ def setArt(music_file_path, image_file_path):
         music = read_tag(music_file_path)
         music.picture = image_file_path
         music.write()
-    except:
+    except Exception as exception:
         set_art_error_file_name = f'{PATH_ERRORS}/errors(setArt).txt'
         with open(set_art_error_file_name, 'a+') as file:
-            file.write(f'Error setting image of {music_file_path}\n')
+            file.write(f'Error setting image of {music_file_path} ({exception})\n')
 
 def setArtRunner(files):
     global PATH_MUSIC, PATH_IMAGES
@@ -97,11 +97,11 @@ def downloadImage(file_name):
         urlImg = loads(details)['murl']
         saveImage(file_name, urlImg)
         print()
-    except:
+    except Exception as exception:
         print('(ERROR)')
         get_image_error_file_name = f'{PATH_ERRORS}/errors(getImage).txt'
         with open(get_image_error_file_name,'a+') as file:
-            file.write(f'{file_name} image not found\n')
+            file.write(f'{file_name} image not found ({exception})\n')
 
 def getAllArts(files_names):
     global PATH_IMAGES
@@ -132,8 +132,8 @@ def setAlbum(files):
     try:
         with open(count_file_name, 'w') as file:
             file.write(str(count))
-    except:
-        error = f'Failed to write {count_file_name}\nGive write permissions'
+    except Exception as exception:
+        error = f'Failed to write {count_file_name}\nGive write permissions. ({exception})'
         print(error)
 
 #----------------- SET LYRICS ------------------#
@@ -146,10 +146,10 @@ def setLyrics(music_file_path, lyrics_file_path):
         tagg = mp3.tag
         tagg.lyrics.set(lyrics)
         tagg.save(music_file_path)
-    except:
+    except Exception as exception:
         set_lyrics_error_file_name = f'{PATH_ERRORS}/errors(setLyrics).txt'
         with open(set_lyrics_error_file_name,'a+') as file:
-            file.write(f'Error setting lyrics of {music_file_path}\n')
+            file.write(f'Error setting lyrics of {music_file_path} ({exception})\n')
 
 def setLyricsRunner(files_names):
     global PATH_MUSIC, PATH_LYRICS
@@ -196,8 +196,8 @@ def downloadLyrics(file_name):
                 divs = soup.find_all('div', class_='text-center')[4]
                 lyrics = divs.find_all('div')[5].text.strip()
                 writelyrics(file_name,lyrics)
-            except:
-                print('(IP Blocked by https://www.azlyrics.com)')
+            except Exception as exception:
+                print(f'(IP Blocked by https://www.azlyrics.com) ({exception})')
             print()
             return
         elif (letssingit in href or lyricsbox in href) and href[-7:]!=nott:
