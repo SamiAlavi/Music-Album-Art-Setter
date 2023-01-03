@@ -184,7 +184,8 @@ def downloadLyrics(file_name):
     
     param = file_name[:-4]
     soup = getParseableSoup(yahoo_search_url, param)
-    elements_a = soup.find_all('a', class_='ac-algo')
+    classes = " d-ib fz-20 lh-26 td-hu tc va-bot mxw-100p".replace(' ', '.')
+    elements_a = soup.select(f'a{classes}')
     
     for element in elements_a:
         href = element['href']
@@ -192,7 +193,7 @@ def downloadLyrics(file_name):
             referrer = getYahooReferrerLink(href)
             soup = getParseableSoup(referrer)
             try:
-                divs = soup.find_all('div', class_='text-center')[3]
+                divs = soup.find_all('div', class_='text-center')[4]
                 lyrics = divs.find_all('div')[5].text.strip()
                 writelyrics(file_name,lyrics)
             except:
