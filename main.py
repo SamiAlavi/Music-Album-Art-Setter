@@ -1,46 +1,46 @@
+if __name__ != '__main__':  
+    exit()
+
 import os
 from combined import setupSession, getAllArts, setArtRunner, getAllLyrics, setLyricsRunner, setAlbum, setPaths
 
-def checkformat(query, formats):
-    return query.lower().endswith(formats)
+def validate_extension(query, extension):
+    return query.lower().endswith(extension)
 
-if __name__ == '__main__':  
-    if 'src' in os.listdir():
-        os.chdir('src/')        
-        
-    PATH_MUSIC='Music'
-    setPaths(PATH_MUSIC)
-    files = os.listdir(PATH_MUSIC)    
-    audioforms = ['.mp3'] #.mp3 supported
-    options = ['n','y']
+def is_flag_yes(flag):
+    return flag == 'y'
 
-    # options
-    flag1 = input('Find album arts? (n/Y) ').lower()
-    while flag1 not in options:
-        flag1 = input('Find album arts? (n/Y) ').lower()
+def get_user_input(message):
+    options = ['n', 'y']
+    user_input = input(message).lower()
+    while user_input not in options:
+        print('Valid input: (N/Y/n/y)')
+        user_input = input(message).lower()
+    return is_flag_yes(user_input)
     
-    flag2 = input('Find music lyrics? (N/y) ').lower()
-    while flag2 not in options:
-        flag2 = input('Find music lyrics? (N/y) ').lower()
+PATH_MUSIC = 'Music'
+EXTENSIONS_SUPPORTED = ['.mp3'] #.mp3 supported
 
-    flag3 = input('Rename album names? (N/y) ').lower()
-    while flag3 not in options:
-        flag3 = input('Rename album names? (N/y) ').lower()
-        
-    setupSession()
-    files = [fname for fname in files for formatt in audioforms if checkformat(fname, formatt)]
-    print('\nTotal files:',len(files))
-    
-    if flag1=='y':
-        print('\nGetting album arts')
-        getAllArts(files) #getAllArts called
-        setArtRunner(files) #setArtRunner called
-    
-    if flag2=='y':
-        print('\nGetting lyrics')
-        getAllLyrics(files) #getAllLyrics called
-        setLyricsRunner(files) #setLyricsRunner called
+# options
+find_album_arts = get_user_input('Find album arts? (n/Y) ')
+find_music_lyrics = input('Find music lyrics? (N/y) ')
+rename_albums_names = input('Rename album names? (N/y) ')
 
-    if flag3=='y':
-        print('\nGetting album names')
-        setAlbum(files) #setAlbum called
+setPaths(PATH_MUSIC)
+setupSession()
+files_names = [file_name for file_name in os.listdir(PATH_MUSIC) for extension in EXTENSIONS_SUPPORTED if validate_extension(file_name, extension)]
+print(f'\nTotal files: {len(files_names)}')
+
+if find_album_arts:
+    print('\nGetting album arts')
+    getAllArts(files_names) #getAllArts called
+    setArtRunner(files_names) #setArtRunner called
+
+if find_music_lyrics:
+    print('\nGetting lyrics')
+    getAllLyrics(files_names) #getAllLyrics called
+    setLyricsRunner(files_names) #setLyricsRunner called
+
+if rename_albums_names:
+    print('\nGetting album names')
+    setAlbum(files_names) #setAlbum called
