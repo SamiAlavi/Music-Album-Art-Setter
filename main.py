@@ -19,9 +19,8 @@ def get_user_input(message):
     return is_flag_yes(user_input)
     
 PATH_MUSIC = 'Music'
-EXTENSIONS_SUPPORTED = ['.mp3'] #.mp3 supported
+EXTENSIONS_SUPPORTED = ['.mp3']
 
-# options
 find_album_arts = get_user_input('Find album arts? (n/Y) ')
 find_music_lyrics = input('Find music lyrics? (N/y) ')
 rename_albums_names = input('Rename album names? (N/y) ')
@@ -33,14 +32,14 @@ print(f'\nTotal files: {len(files_names)}')
 
 if find_album_arts:
     print('\nGetting album arts')
-    getAllArts(files_names) #getAllArts called
-    setArtRunner(files_names) #setArtRunner called
+    getAllArts(files_names)
+    setArtRunner(files_names)
 
 if find_music_lyrics:
     print('\nGetting lyrics')
-    getAllLyrics(files_names) #getAllLyrics called
-    setLyricsRunner(files_names) #setLyricsRunner called
+    getAllLyrics(files_names)
+    setLyricsRunner(files_names)
 
 if rename_albums_names:
     print('\nGetting album names')
-    setAlbum(files_names) #setAlbum called
+    setAlbum(files_names)
