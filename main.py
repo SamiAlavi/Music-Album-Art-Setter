@@ -2,7 +2,7 @@ if __name__ != '__main__':
     exit()
 
 import os
-from helper import setupSession, getAllArts, setArtRunner, getAllLyrics, setLyricsRunner, setAlbum, setPaths
+from helper import setupSession, getAllLyrics, setLyricsRunner, setAlbum, setPaths
 
 def validate_extension(query, extension):
     return query.lower().endswith(extension)
@@ -31,6 +31,7 @@ files_names = [file_name for file_name in os.listdir(PATH_MUSIC) for extension i
 print(f'\nTotal files: {len(files_names)}')
 
 if find_album_arts:
+    from album_art import getAllArts, setArtRunner
     print('\nGetting album arts')
     getAllArts(files_names)
     setArtRunner(files_names)
