@@ -2,7 +2,7 @@ if __name__ != '__main__':
     exit()
 
 import os
-from combined import setupSession, getAllArts, setArtRunner, getAllLyrics, setLyricsRunner, setAlbum, setPaths
+from helper import setupSession, getAllArts, setArtRunner, getAllLyrics, setLyricsRunner, setAlbum, setPaths
 
 def validate_extension(query, extension):
     return query.lower().endswith(extension)
