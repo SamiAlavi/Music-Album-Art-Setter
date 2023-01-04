@@ -22,8 +22,8 @@ PATH_MUSIC = 'Music'
 EXTENSIONS_SUPPORTED = ['.mp3']
 
 find_album_arts = get_user_input('Find album arts? (n/Y) ')
-find_music_lyrics = input('Find music lyrics? (N/y) ')
-rename_albums_names = input('Rename album names? (N/y) ')
+find_music_lyrics = get_user_input('Find music lyrics? (N/y) ')
+rename_albums_names = get_user_input('Rename album names? (N/y) ')
 
 setPaths(PATH_MUSIC)
 setupSession()
