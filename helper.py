@@ -53,3 +53,5 @@ def setPaths(path):
     PATH_ERRORS = f'{path}/downloads'   
     PATH_IMAGES = f'{path}/downloads/images'
     PATH_LYRICS = f'{path}/downloads/lyrics'
+
+setupSession()
