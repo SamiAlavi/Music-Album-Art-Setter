@@ -2,7 +2,7 @@ if __name__ != '__main__':
     exit()
 
 import os
-from helper import setupSession, getAllLyrics, setLyricsRunner, setAlbum, setPaths
+from helper import setupSession, getAllLyrics, setLyricsRunner, setPaths
 
 def validate_extension(query, extension):
     return query.lower().endswith(extension)
@@ -42,5 +42,6 @@ if find_music_lyrics:
     setLyricsRunner(files_names)
 
 if rename_albums_names:
+    from album_name import setAlbum
     print('\nGetting album names')
     setAlbum(files_names)
