@@ -1,6 +1,6 @@
 from os import listdir
 from eyed3 import load
-from helper import createDir
+from helper import create_directories
 from helper import PATH_MUSIC, PATH_LYRICS, PATH_ERRORS
 from helper_request import getParseableSoup
 from helper_path import unhide_directory
@@ -84,7 +84,7 @@ def downloadLyrics(file_name):
 
 def getAllLyrics(files_names):
     global PATH_LYRICS
-    createDir()
+    create_directories()
     for index, file_name in enumerate(files_names):
         lyrics_file_name = f'{file_name}.txt'
         if lyrics_file_name in listdir(PATH_LYRICS): # prevent re-downloading of lyrics with same names

@@ -1,7 +1,7 @@
 from os import listdir
 from json import loads
 from stagger import read_tag
-from helper import createDir
+from helper import create_directories
 from helper import PATH_MUSIC, PATH_IMAGES, PATH_ERRORS
 from helper_request import getUrlContent, getParseableSoup
 from helper_path import unhide_directory
@@ -53,7 +53,7 @@ def downloadImage(file_name):
 
 def getAllArts(files_names):
     global PATH_IMAGES
-    createDir()
+    create_directories()
     for index, file_name in enumerate(files_names):
         image_file_name = f'{file_name}.jpg'
         if image_file_name in listdir(PATH_IMAGES): # prevent re-downloading of images with same names
