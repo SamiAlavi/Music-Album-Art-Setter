@@ -1,9 +1,10 @@
 from os import listdir
 from json import loads
 from stagger import read_tag
-from helper import unhide_directory, createDir
+from helper import createDir
 from helper import PATH_MUSIC, PATH_IMAGES, PATH_ERRORS
 from helper_request import getUrlContent, getParseableSoup
+from helper_path import unhide_directory
 
 #------------------SET ALBUM ART ------------------#
 def setArt(music_file_path, image_file_path):
@@ -18,12 +19,12 @@ def setArt(music_file_path, image_file_path):
             file.write(f'Error setting image of {music_file_path} ({exception})\n')
 
 def setArtRunner(files):
-    global PATH_MUSIC, PATH_IMAGES
+    global PATH_ERRORS, PATH_MUSIC, PATH_IMAGES
     for file_name in files:
         music_file_path = f'{PATH_MUSIC}/{file_name}'
         image_file_path = f'{PATH_IMAGES}/{file_name}.jpg'
         setArt(music_file_path, image_file_path)
-    unhide_directory()
+    unhide_directory(PATH_ERRORS)
 
 
 #------------------GET ALBUM ART ------------------#
