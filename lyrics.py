@@ -3,22 +3,21 @@ from eyed3 import load
 from helper import create_directories
 from helper import PATH_MUSIC, PATH_LYRICS, PATH_ERRORS
 from helper_request import getParseableSoup
-from helper_path import unhide_directory
+from helper_path import unhide_directory, read_file, append_error_to_file, write_to_file
 
 #----------------- SET LYRICS ------------------#
 def setLyrics(music_file_path, lyrics_file_path):
     global PATH_ERRORS
     try:
-        with open(lyrics_file_path,'r', encoding='utf-8') as file:
-            lyrics = file.read()
+        lyrics = read_file(lyrics_file_path)
         mp3 = load(music_file_path)
         tagg = mp3.tag
         tagg.lyrics.set(lyrics)
         tagg.save(music_file_path)
     except Exception as exception:
-        set_lyrics_error_file_name = f'{PATH_ERRORS}/errors(setLyrics).txt'
-        with open(set_lyrics_error_file_name,'a+') as file:
-            file.write(f'Error setting lyrics of {music_file_path} ({exception})\n')
+        error_file_path = f'{PATH_ERRORS}/errors(setLyrics).txt'
+        error_message = f'Error setting lyrics of {music_file_path}'
+        append_error_to_file(error_file_path, error_message, exception)
 
 def setLyricsRunner(files_names):
     global PATH_ERRORS, PATH_MUSIC, PATH_LYRICS
@@ -34,8 +33,7 @@ def writelyrics(file_name, lyrics):
     if lyrics is not None:
         lyrics = lyrics.replace('’',"'")
         lyrics_file_path = f'{PATH_LYRICS}/{file_name}.txt'
-        with open(lyrics_file_path,'w', encoding='utf-8') as file:
-            file.write(lyrics)
+        write_to_file(lyrics_file_path, lyrics)
 
 def getYahooReferrerLink(link):
     soup = getParseableSoup(link)
@@ -78,9 +76,9 @@ def downloadLyrics(file_name):
             return
     
     print('(ERROR)')
-    get_lyrics_error_file_name = f'{PATH_ERRORS}/errors(getLyrics).txt'
-    with open(get_lyrics_error_file_name, 'a', encoding='utf-8') as file:
-        file.write(f'{file_name} lyrics not found\n')
+    path_error_file = f'{PATH_ERRORS}/errors(getLyrics).txt'
+    error_message = f'{file_name} lyrics not found'
+    append_error_to_file(path_error_file, error_message, None)
 
 def getAllLyrics(files_names):
     global PATH_LYRICS

@@ -4,7 +4,7 @@ from stagger import read_tag
 from helper import create_directories
 from helper import PATH_MUSIC, PATH_IMAGES, PATH_ERRORS
 from helper_request import getUrlContent, getParseableSoup
-from helper_path import unhide_directory
+from helper_path import unhide_directory, append_error_to_file, write_bytes_to_file
 
 #------------------SET ALBUM ART ------------------#
 def setArt(music_file_path, image_file_path):
@@ -14,9 +14,9 @@ def setArt(music_file_path, image_file_path):
         music.picture = image_file_path
         music.write()
     except Exception as exception:
-        set_art_error_file_name = f'{PATH_ERRORS}/errors(setArt).txt'
-        with open(set_art_error_file_name, 'a+') as file:
-            file.write(f'Error setting image of {music_file_path} ({exception})\n')
+        error_file_path = f'{PATH_ERRORS}/errors(setArt).txt'
+        error_message = f'Error setting image of {music_file_path}'
+        append_error_to_file(error_file_path, error_message, exception)
 
 def setArtRunner(files):
     global PATH_ERRORS, PATH_MUSIC, PATH_IMAGES
@@ -32,8 +32,7 @@ def saveImage(file_name, image_url):
     global PATH_IMAGES
     img_data = getUrlContent(image_url)
     image_file_path = f'{PATH_IMAGES}/{file_name}.jpg'
-    with open(image_file_path, 'wb') as file:
-        file.write(img_data)
+    write_bytes_to_file(image_file_path, img_data)
 
 def downloadImage(file_name):
     global PATH_ERRORS
@@ -47,9 +46,9 @@ def downloadImage(file_name):
         print()
     except Exception as exception:
         print('(ERROR)')
-        get_image_error_file_name = f'{PATH_ERRORS}/errors(getImage).txt'
-        with open(get_image_error_file_name,'a+') as file:
-            file.write(f'{file_name} image not found ({exception})\n')
+        error_file_path = f'{PATH_ERRORS}/errors(getImage).txt'
+        error_message = f'{file_name} image not found'
+        append_error_to_file(error_file_path, error_message, exception)
 
 def getAllArts(files_names):
     global PATH_IMAGES
