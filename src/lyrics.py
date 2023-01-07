@@ -1,6 +1,6 @@
 from os import listdir
 from eyed3 import load
-from .helper.helper import create_directories, PATH_MUSIC, PATH_LYRICS, PATH_ERRORS
+from .helper.helper import create_directories, get_update_callback, PATH_MUSIC, PATH_LYRICS, PATH_ERRORS
 from .helper.helper_request import getParseableSoup
 from .helper.helper_path import unhide_directory, read_file, append_error_to_file, write_to_file
 
@@ -79,19 +79,22 @@ def downloadLyrics(file_name):
     error_message = f'{file_name} lyrics not found'
     append_error_to_file(path_error_file, error_message, None)
 
-def getAllLyrics(files_names):
+def getAllLyrics(files_names, update_callback):
     global PATH_LYRICS
     create_directories()
+    length = len(files_names)
     for index, file_name in enumerate(files_names):
         lyrics_file_name = f'{file_name}.txt'
+        update_callback(index+1, length, file_name)
         if lyrics_file_name in listdir(PATH_LYRICS): # prevent re-downloading of lyrics with same names
             continue
         print(f'{index+1}) {file_name}', end=' ')
         downloadLyrics(file_name)
 
-def start_lyrics_runner(files_names):    
+def start_lyrics_runner(files_names, dialog=None):    
     print('\nGetting lyrics')
-    getAllLyrics(files_names)
+    update_callback = get_update_callback(dialog)
+    getAllLyrics(files_names, update_callback)
     print('\nSetting lyrics')
     setLyricsRunner(files_names)
     
