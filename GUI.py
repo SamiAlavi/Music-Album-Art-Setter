@@ -18,11 +18,9 @@ class GUI:
         root.bind("<Return>", self.runCombined) # setting for calling function when pressed KEY
 
     def setup_first_frame(self):
-        self.frame1 = self.get_first_frame()
-        
+        self.frame1 = self.get_first_frame()        
         self.setup_options()        
         self.setup_second_frame()
-
         self.frame1.pack(fill=BOTH)
 
     def get_first_frame(self):
@@ -43,10 +41,14 @@ class GUI:
         return frame
 
     def setup_second_frame(self):
-        self.frame2=Frame(self.frame1) # Frame 2
+        self.frame2 = self.get_second_frame()        
+        self.frame2.pack(fill=BOTH)
 
-        self.listbox = Listbox(self.frame2)
-        scrollbar = Scrollbar(self.frame2)
+    def get_second_frame(self):
+        frame = Frame(self.frame1)
+
+        self.listbox = Listbox(frame)
+        scrollbar = Scrollbar(frame)
         scrollbar.config(command = self.listbox.yview) 
         self.listbox.config(yscrollcommand = scrollbar.set)
         
@@ -58,7 +60,8 @@ class GUI:
         scrollbar.pack(fill=BOTH, side=RIGHT)
         self.listbox.pack(fill=BOTH, side=BOTTOM)        
         self.button2.pack(fill=BOTH, side=BOTTOM)
-        self.frame2.pack(fill=BOTH)
+
+        return frame
     
     def on_enter(self,e):
         self.previous = e.widget['background']
