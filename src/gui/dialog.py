@@ -1,11 +1,12 @@
 from tkinter import Tk, Label
 from tkinter import HORIZONTAL, LEFT
 from tkinter.ttk import Progressbar
-from src.helper.helper_gui import APP_ICON
-from src.helper.helper_gui import TITLE_INFO, TITLE_APP_QUIT, EMPTY_STR
-from src.helper.helper_gui import TEXT_DIALOG_QUIT
-from src.helper.helper_gui import COLOR_RED
-from src.helper.helper_gui import resource_path, setup_quit_button
+from ..helper import *
+from ..helper.helper_gui import APP_ICON
+from ..helper.helper_gui import TITLE_INFO, TITLE_APP_QUIT, EMPTY_STR
+from ..helper.helper_gui import TEXT_DIALOG_QUIT
+from ..helper.helper_gui import COLOR_RED
+from ..helper.helper_gui import resource_path, setup_quit_button
 
 class Dialog():
 
@@ -42,7 +43,3 @@ class Dialog():
 
     def destroy(self):
         self.root.destroy()
-    
-if __name__ == "__main__":
-    dialog = Dialog("Test Dialog")
-    dialog.root.mainloop()

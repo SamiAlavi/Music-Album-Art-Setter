@@ -1,4 +1,3 @@
-import os
 from .helper_path import hide_directory, createDirectory
 
 PATH_MUSIC = None
