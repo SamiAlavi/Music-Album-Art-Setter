@@ -21,30 +21,18 @@ class GUI:
                               command = self.browseButton)        
         self.label1 = Label(self.frame1,text=f"Path: ",height=2,
                             fg='red')
-        self.button2 = Button(self.frame1,text="Run",height=2,
-                              bg='black',state=DISABLED, command=self.runCombined)
         
         self.button1.pack(fill=X)
         self.label1.pack(fill=X)
         
         self.setupOptions() # options
         
-        self.frame2=Frame(self.frame1) # Frame 2        
-        self.listbox = Listbox(self.frame2)
-        scrollbar = Scrollbar(self.frame2)
-        self.listbox.config(yscrollcommand = scrollbar.set)
-        scrollbar.config(command = self.listbox.yview) 
+        self.setup_second_frame()
 
-        scrollbar.pack(fill=BOTH, side=RIGHT)
-        self.listbox.pack(fill=BOTH, side=BOTTOM)        
-        self.button2.pack(fill=BOTH, side=BOTTOM)
-        self.frame2.pack(fill=BOTH)
         self.frame1.pack(fill=BOTH)
 
         self.button1.bind("<Enter>", self.on_enter)
         self.button1.bind("<Leave>", self.on_leave)
-        self.button2.bind("<Enter>", self.on_enter)
-        self.button2.bind("<Leave>", self.on_leave)
 
         self.browseButton()
         
@@ -55,7 +43,22 @@ class GUI:
         pass
 
     def setup_second_frame(self):
-        pass
+        self.frame2=Frame(self.frame1) # Frame 2
+
+        self.listbox = Listbox(self.frame2)
+        scrollbar = Scrollbar(self.frame2)
+        scrollbar.config(command = self.listbox.yview) 
+        self.listbox.config(yscrollcommand = scrollbar.set)
+        
+        self.button2 = Button(self.frame1,text="Run",height=2,
+                              bg='black',state=DISABLED, command=self.runCombined)
+        self.button2.bind("<Enter>", self.on_enter)
+        self.button2.bind("<Leave>", self.on_leave)
+
+        scrollbar.pack(fill=BOTH, side=RIGHT)
+        self.listbox.pack(fill=BOTH, side=BOTTOM)        
+        self.button2.pack(fill=BOTH, side=BOTTOM)
+        self.frame2.pack(fill=BOTH)
     
     def on_enter(self,e):
         self.previous = e.widget['background']
