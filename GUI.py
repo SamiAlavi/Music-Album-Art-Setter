@@ -33,7 +33,7 @@ class GUI:
         if self.PATH_MUSIC:
             self.changeLabel()
         else:
-            self.files = list()
+            self.files_names = list()
             
     def changeLabel(self):
         self.label1.configure(text=f"Path: {self.PATH_MUSIC}")
@@ -44,7 +44,7 @@ class GUI:
         if length:
             setPaths(self.PATH_MUSIC)
             for i in range(length):
-                t=f"\n{temp1}{i+1}) {self.files[i]}"
+                t=f"\n{temp1}{i+1}) {self.files_names[i]}"
                 self.listbox.insert(END, t) 
             self.button2.configure(state=NORMAL,fg='white', bg='blue')
         else:
@@ -62,7 +62,7 @@ class GUI:
         c3.pack(anchor=W, ipadx=10)
     
     def runCombined(self, event=None):
-        if not len(self.files):
+        if not len(self.files_names):
             return
         # options
         options = self.flag1.get() or self.flag2.get() or self.flag3.get()
@@ -70,15 +70,15 @@ class GUI:
             messagebox.showinfo('', "No option selected")
             
         if self.flag1.get(): 
-            getAllArts(self.files) #getAllArts called
-            setArtRunner(self.files) #setArtRunner called  
+            getAllArts(self.files_names) #getAllArts called
+            setArtRunner(self.files_names) #setArtRunner called  
         
         if self.flag2.get(): 
-            getAllLyrics(self.files) #getAllLyrics called
-            setLyricsRunner(self.files) #setLyricsRunner called
+            getAllLyrics(self.files_names) #getAllLyrics called
+            setLyricsRunner(self.files_names) #setLyricsRunner called
 
         if self.flag3.get():           
-            setAlbum(self.files) #setAlbum called
+            setAlbum(self.files_names) #setAlbum called
      
         #messagebox.showinfo('', 'Completed')
         
