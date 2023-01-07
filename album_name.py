@@ -3,7 +3,7 @@ from helper import PATH_MUSIC
 from helper_path import read_file, write_to_file
 
 #------------------ ALBUM NUMBER ------------------#            
-def setAlbum(files):
+def setAlbum(files_names):
     global PATH_MUSIC
     count_file_name = 'count.txt'
     try:
@@ -11,7 +11,7 @@ def setAlbum(files):
     except:
         count = 0
     
-    for _, file_name in enumerate(files):
+    for _, file_name in enumerate(files_names):
         count+=1
         music=read_tag(f'{PATH_MUSIC}/{file_name}')
         music.album=str(count)
@@ -22,3 +22,7 @@ def setAlbum(files):
     except Exception as exception:
         error = f'Failed to write {count_file_name}\nGive write permissions. ({exception})'
         print(error)
+
+def start_album_names_runner(files_names):
+    print('\nSetting album names')
+    setAlbum(files_names)

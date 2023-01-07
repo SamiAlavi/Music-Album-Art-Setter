@@ -33,20 +33,13 @@ files_names = [file_name for file_name in listdir(PATH_MUSIC) for extension in E
 print(f'\nTotal files: {len(files_names)}')
 
 if find_album_arts:
-    from album_art import getAllArts, setArtRunner
-    print('\nGetting album arts')
-    getAllArts(files_names)
-    print('\nSetting album arts')
-    setArtRunner(files_names)
+    from album_art import start_album_arts_runner
+    start_album_arts_runner(files_names)
 
 if find_music_lyrics:
-    from lyrics import getAllLyrics, setLyricsRunner
-    print('\nGetting lyrics')
-    getAllLyrics(files_names)
-    print('\nSetting lyrics')
-    setLyricsRunner(files_names)
+    from lyrics import start_lyrics_runner
+    start_lyrics_runner(files_names)
 
 if rename_albums_names:
-    from album_name import setAlbum
-    print('\nSetting album names')
-    setAlbum(files_names)
+    from album_name import start_album_names_runner
+    start_album_names_runner(files_names)

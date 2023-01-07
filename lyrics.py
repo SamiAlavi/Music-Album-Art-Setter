@@ -89,3 +89,10 @@ def getAllLyrics(files_names):
             continue
         print(f'{index+1}) {file_name}', end=' ')
         downloadLyrics(file_name)
+
+def start_lyrics_runner(files_names):    
+    print('\nGetting lyrics')
+    getAllLyrics(files_names)
+    print('\nSetting lyrics')
+    setLyricsRunner(files_names)
+    

@@ -59,3 +59,9 @@ def getAllArts(files_names):
             continue
         print(f'{index+1}) {file_name}', end=' ')
         downloadImage(file_name)
+
+def start_album_arts_runner(files_names):
+    print('\nGetting album arts')
+    getAllArts(files_names)
+    print('\nSetting album arts')
+    setArtRunner(files_names)
