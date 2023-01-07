@@ -1,7 +1,7 @@
 from os import listdir
 from json import loads
 from stagger import read_tag
-from .helper.helper import create_directories, PATH_MUSIC, PATH_IMAGES, PATH_ERRORS
+from .helper.helper import create_directories, get_update_callback, PATH_MUSIC, PATH_IMAGES, PATH_ERRORS
 from .helper.helper_request import getUrlContent, getParseableSoup
 from .helper.helper_path import unhide_directory, append_error_to_file, write_bytes_to_file
 
@@ -49,18 +49,20 @@ def downloadImage(file_name):
         error_message = f'{file_name} image not found'
         append_error_to_file(error_file_path, error_message, exception)
 
-def getAllArts(files_names):
+def getAllArts(files_names, update_callback):
     global PATH_IMAGES
     create_directories()
+    length = len(files_names)
     for index, file_name in enumerate(files_names):
         image_file_name = f'{file_name}.jpg'
+        update_callback(index+1, length, file_name)
         if image_file_name in listdir(PATH_IMAGES): # prevent re-downloading of images with same names
             continue
-        print(f'{index+1}) {file_name}', end=' ')
         downloadImage(file_name)
 
-def start_album_arts_runner(files_names):
+def start_album_arts_runner(files_names, dialog=None):
     print('\nGetting album arts')
-    getAllArts(files_names)
+    update_callback = get_update_callback(dialog)
+    getAllArts(files_names, update_callback)
     print('\nSetting album arts')
     setArtRunner(files_names)

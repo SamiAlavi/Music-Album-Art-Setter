@@ -1,6 +1,9 @@
 Music/*
+build
+dist
 **/__pycache__
 count.txt
 debug.log
+*.spec
 
 !Music/.gitkeep

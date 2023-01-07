@@ -1,4 +1,3 @@
-import os
 from .helper_path import hide_directory, createDirectory
 
 PATH_MUSIC = None
@@ -18,3 +17,9 @@ def setPaths(path):
     PATH_ERRORS = f'{path}/downloads'   
     PATH_IMAGES = f'{path}/downloads/images'
     PATH_LYRICS = f'{path}/downloads/lyrics'
+
+def get_update_callback(dialog):
+    if dialog:
+        return lambda index, length, file_name: dialog.update_progress(index, length, file_name)
+    else:
+        return lambda index, _, file_name: print(f'{index}) {file_name}', end=' ')

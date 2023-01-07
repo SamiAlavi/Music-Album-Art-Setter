@@ -3,7 +3,7 @@ from .helper.helper import PATH_MUSIC
 from .helper.helper_path import read_file, write_to_file
 
 #------------------ ALBUM NUMBER ------------------#            
-def setAlbum(files_names):
+def setAlbum(files_names, update_callback):
     global PATH_MUSIC
     count_file_name = 'count.txt'
     try:
@@ -21,8 +21,8 @@ def setAlbum(files_names):
         write_to_file(count_file_name, str(count))
     except Exception as exception:
         error = f'Failed to write {count_file_name}\nGive write permissions. ({exception})'
-        print(error)
+        update_callback(error)
 
-def start_album_names_runner(files_names):
+def start_album_names_runner(files_names, update_callback=print):
     print('\nSetting album names')
-    setAlbum(files_names)
+    setAlbum(files_names, update_callback)
