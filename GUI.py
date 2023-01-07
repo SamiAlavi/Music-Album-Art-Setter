@@ -2,19 +2,32 @@ from tkinter import Tk, Frame, Button, Label, Checkbutton, Listbox, Scrollbar, m
 from tkinter import IntVar, BOTH, RIGHT, BOTTOM, NORMAL, DISABLED, END, W, X
 ########################################################################
 from os import listdir
-from combinedGUI import getAllArts, setArtRunner, getAllLyrics, setLyricsRunner
-from combinedGUI import setPaths, setAlbum, setupQuit, resource_path
+from combinedGUI import getAllArts, setArtRunner, getAllLyrics, setLyricsRunner, setPaths, setAlbum
+from helper_gui import resource_path, setupQuit
 ########################################################################
 from src.helper.helper_path import validate_extension
 
-class GUI:
+class GUI(Tk):
     previous_widget_color = None
     EXTENSIONS_SUPPORTED = ['.mp3']
         
-    def __init__(self, root):
+    def __init__(self):
+        super().__init__()
+
+        self.setup_root()
         self.setup_first_frame()
         self.browse_button()        
-        root.bind("<Return>", self.run_combined) # setting for calling function when pressed KEY
+        self.bind("<Return>", self.run_combined) # setting for calling function when pressed KEY
+
+    def setup_root(self):
+        self.iconbitmap(resource_path('music.ico'))
+        self.title('Music Album Art Setter')
+        self.geometry('500x300')
+        self.lift()
+        self.focus_force()
+        title = 'Quit?'
+        text = 'Are you sure you want to quit?'
+        setupQuit(self, title, text)
 
     def setup_first_frame(self):
         self.frame1 = self.get_first_frame()        
@@ -23,7 +36,7 @@ class GUI:
         self.frame1.pack(fill=BOTH)
 
     def get_first_frame(self):
-        frame = Frame(root)
+        frame = Frame(self)
         
         button = Button(frame,text="Browse Music",height=2,
                               fg='white', bg='blue',
@@ -135,18 +148,5 @@ class GUI:
      
         #messagebox.showinfo('', 'Completed')
 
-def setupRoot():
-    root = Tk()
-    root.iconbitmap(resource_path('music.ico'))
-    root.title('Music Album Art Setter')
-    root.geometry('500x300')
-    root.lift()
-    root.focus_force()
-    title = 'Quit?'
-    text = 'Are you sure you want to quit?'
-    setupQuit(root, title, text)
-    return root
-
-root = setupRoot()
-gui = GUI(root)
-root.mainloop()
+gui = GUI()
+gui.mainloop()
