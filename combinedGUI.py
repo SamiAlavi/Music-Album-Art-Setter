@@ -14,22 +14,6 @@ from src.helper.helper_path import unhide_directory
 
 headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
 
-#------------------SET ALBUM ART ------------------#
-    
-def setArt(song, art):
-    try:
-        mp3=read_tag(song)
-        mp3.picture=art
-        mp3.write()
-    except:
-        with open(f'{helper.PATH_ERRORS}/errors(setArt).txt','a+') as f:
-            f.write(f'{song} not found in {helper.PATH_IMAGES}\n')
-
-def setArtRunner(files):
-    for filename in files:
-        setArt(f'{helper.PATH_MUSIC}/{filename}',f'{helper.PATH_IMAGES}/{filename}.jpg')
-    unhide_directory(helper.PATH_ERRORS)
-
 def album_arts_runner(files_names):
     from src.album_art import start_album_arts_runner
     dialog = Dialog('Getting album arts')
