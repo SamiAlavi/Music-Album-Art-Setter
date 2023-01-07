@@ -18,25 +18,29 @@ class GUI:
         root.bind("<Return>", self.runCombined) # setting for calling function when pressed KEY
 
     def setup_first_frame(self):
-        self.frame1 = Frame(root) # Frame 1
+        self.frame1 = self.get_first_frame()
         
-        self.button1 = Button(self.frame1,text="Browse Music",height=2,
-                              fg='white', bg='blue',
-                              command = self.browseButton)
-        self.button1.bind("<Enter>", self.on_enter)
-        self.button1.bind("<Leave>", self.on_leave)
-
-        self.label1 = Label(self.frame1,text=f"Path: ",height=2,
-                            fg='red')
-        
-        self.button1.pack(fill=X)
-        self.label1.pack(fill=X)
-        
-        self.setup_options()
-        
+        self.setup_options()        
         self.setup_second_frame()
 
         self.frame1.pack(fill=BOTH)
+
+    def get_first_frame(self):
+        frame = Frame(root)
+        
+        button = Button(frame,text="Browse Music",height=2,
+                              fg='white', bg='blue',
+                              command = self.browseButton)
+        button.bind("<Enter>", self.on_enter)
+        button.bind("<Leave>", self.on_leave)
+
+        self.label1 = Label(frame,text=f"Path: ",height=2,
+                            fg='red')
+        
+        button.pack(fill=X)
+        self.label1.pack(fill=X)
+
+        return frame
 
     def setup_second_frame(self):
         self.frame2=Frame(self.frame1) # Frame 2
@@ -104,7 +108,7 @@ class GUI:
         c1 = Checkbutton(self.frame1, text="Find album arts?", variable=self.find_album_arts, onvalue=1, offvalue=0)
         c2 = Checkbutton(self.frame1, text="Find music lyrics?", variable=self.find_music_lyrics, onvalue=1, offvalue=0)
         c3 = Checkbutton(self.frame1, text="Rename album names?", variable=self.rename_albums_names, onvalue=1, offvalue=0)
-        
+
         c1.pack(anchor=W, ipadx=10)
         c2.pack(anchor=W, ipadx=10)
         c3.pack(anchor=W, ipadx=10)
