@@ -21,6 +21,6 @@ def setPaths(path):
 
 def get_update_callback(dialog):
     if dialog:
-        return lambda index, length, file_name: dialog.changeProgress(index, length, file_name)
+        return lambda index, length, file_name: dialog.update_progress(index, length, file_name)
     else:
         return lambda index, _, file_name: print(f'{index}) {file_name}', end=' ')
