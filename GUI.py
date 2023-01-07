@@ -19,7 +19,7 @@ class GUI(Tk):
         self.setup_root()
         self.setup_first_frame()
         self.browse_button()        
-        self.bind("<Return>", self.run_combined) # setting for calling function when pressed KEY
+        self.bind("<Return>", self.run_combined)
 
     def setup_root(self):
         self.iconbitmap(resource_path('music.ico'))
@@ -98,7 +98,6 @@ class GUI(Tk):
             
     def update_label(self):
         self.label1.configure(text=f"Path: {self.PATH_MUSIC}")
-        #root.after(1000, self.changeLabel)
 
     def update_files_list(self):
         self.listbox.delete(0,END)
@@ -114,7 +113,6 @@ class GUI(Tk):
         else:
             text = 'No music files found'
             self.button2.configure(state=DISABLED, bg='black')
-        #root.after(1000, self.update_files_list)
 
     def setup_options(self):
         self.find_album_arts = IntVar()
@@ -132,7 +130,7 @@ class GUI(Tk):
     def run_combined(self, event=None):
         if not len(self.files_names):
             return
-        # options
+            
         options = self.find_album_arts.get() or self.find_music_lyrics.get() or self.rename_albums_names.get()
         if not options:    
             messagebox.showinfo('', "No option selected")
