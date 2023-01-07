@@ -2,17 +2,15 @@ from tkinter import *
 from tkinter import messagebox
 from tkinter import filedialog
 ########################################################################
-import os
+from os import listdir
 from combinedGUI import getAllArts, setArtRunner, getAllLyrics, setLyricsRunner
 from combinedGUI import setPaths, setAlbum, setupQuit, resource_path
 ########################################################################
-
-def checkformat(query, format):
-    return query.lower().endswith(format)
+from src.helper.helper_path import validate_extension
 
 class GUI:
     previous = None
-    audioforms = ['.mp3'] #.mp3 supported
+    EXTENSIONS_SUPPORTED = ['.mp3'] #.mp3 supported
     
     def on_enter(self,e):
         self.previous = e.widget['background']
@@ -27,9 +25,8 @@ class GUI:
         else:
             self.t_btn.config(text='True')
 
-    def getFiles(self):
-        self.files = [filename for filename in os.listdir(self.PATH_MUSIC) for format in self.audioforms if checkformat(filename, format)]
-        return len(self.files)
+    def get_files_names(self):
+        return [file_name for file_name in listdir(self.PATH_MUSIC) for extension in self.EXTENSIONS_SUPPORTED if validate_extension(file_name, extension)]
 
     def browseButton(self):
         self.PATH_MUSIC =  filedialog.askdirectory()
@@ -41,7 +38,8 @@ class GUI:
     def changeLabel(self):
         self.label1.configure(text=f"Path: {self.PATH_MUSIC}")
         self.listbox.delete(0,END)
-        length = self.getFiles()
+        self.files_names = self.get_files_names()
+        length = len(self.files_names)
         temp1='     '
         if length:
             setPaths(self.PATH_MUSIC)
@@ -134,9 +132,6 @@ def setupRoot():
     text = 'Are you sure you want to quit?'
     setupQuit(root, title, text)
     return root
-
-if 'src' in os.listdir():
-    os.chdir('src')
 
 root = setupRoot()
 gui=GUI()
