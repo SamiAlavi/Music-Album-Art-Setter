@@ -70,12 +70,6 @@ class GUI:
 
     def on_leave(self, event):
         event.widget['background'] = self.previous_widget_color
-        
-    def toggle(self):
-        if self.t_btn.config('text')[-1] == 'True':
-            self.t_btn.config(text='False')
-        else:
-            self.t_btn.config(text='True')
 
     def get_files_names(self):
         return [file_name for file_name in listdir(self.PATH_MUSIC) for extension in self.EXTENSIONS_SUPPORTED if validate_extension(file_name, extension)]
