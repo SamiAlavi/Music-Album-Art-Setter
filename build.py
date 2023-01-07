@@ -2,9 +2,9 @@ import PyInstaller.__main__
 
 PyInstaller.__main__.run([
     '--onefile',
-    'src/GUI.py',
+    'GUI.py',
     '--add-data',
-    'src/music.ico;.',
-    '--icon=src/music.ico',
+    'music.ico;.',
+    '--icon=music.ico',
     '--windowed'
 ])
