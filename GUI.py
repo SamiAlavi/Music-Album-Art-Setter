@@ -2,6 +2,8 @@ from tkinter import Tk, Frame, Button, Label, Checkbutton, Listbox, Scrollbar, m
 from tkinter import IntVar, BOTH, RIGHT, BOTTOM, NORMAL, DISABLED, END, W, X
 ########################################################################
 from os import listdir
+import sys
+from NullIO import NullIO
 from combinedGUI import album_arts_runner, getAllLyrics, setLyricsRunner, setAlbum
 from helper_gui import resource_path, setupQuit
 from src.helper.helper import setPaths
@@ -148,5 +150,6 @@ class GUI(Tk):
      
         #messagebox.showinfo('', 'Completed')
 
+sys.stdout = NullIO()
 gui = GUI()
 gui.mainloop()
