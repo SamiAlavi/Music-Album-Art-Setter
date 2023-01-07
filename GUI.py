@@ -46,15 +46,12 @@ class GUI(Tk):
     def get_first_frame(self):
         frame = Frame(self)
         
-        button = Button(frame,text=TEXT_BROWSE,height=2,
-                              fg=COLOR_WHITE, bg=COLOR_BLUE,
-                              command = self.browse_button)
+        button = Button(frame, text=TEXT_BROWSE, height=2, fg=COLOR_WHITE, bg=COLOR_BLUE, command = self.browse_button)
         button.bind(EVENT_ENTER, self.on_enter)
         button.bind(EVENT_LEAVE, self.on_leave)
         
-        text = TEXT_PATH.format('')
-        self.label1 = Label(frame,text=text,height=2,
-                            fg=COLOR_RED)
+        text = TEXT_PATH.format(EMPTY_STR)
+        self.label1 = Label(frame, text=text, height=2, fg=COLOR_RED)
         
         button.pack(fill=X)
         self.label1.pack(fill=X)
@@ -70,11 +67,10 @@ class GUI(Tk):
 
         self.listbox = Listbox(frame)
         scrollbar = Scrollbar(frame)
-        scrollbar.config(command = self.listbox.yview) 
-        self.listbox.config(yscrollcommand = scrollbar.set)
+        scrollbar.config(command=self.listbox.yview) 
+        self.listbox.config(yscrollcommand=scrollbar.set)
         
-        self.button2 = Button(self.frame1,text=TEXT_RUN,height=2,
-                              bg=COLOR_BLACK,state=DISABLED, command=self.run_combined)
+        self.button2 = Button(self.frame1, text=TEXT_RUN, height=2, bg=COLOR_BLACK, state=DISABLED, command=self.run_combined)
         self.button2.bind(EVENT_ENTER, self.on_enter)
         self.button2.bind(EVENT_LEAVE, self.on_leave)
 
@@ -108,7 +104,7 @@ class GUI(Tk):
         self.label1.configure(text=text)
 
     def update_files_list(self):
-        self.listbox.delete(0,END)
+        self.listbox.delete(0, END)
         self.files_names = self.get_files_names()
         padding_left = '     '
 
