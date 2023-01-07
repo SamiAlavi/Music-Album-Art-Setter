@@ -13,12 +13,19 @@ class GUI:
     EXTENSIONS_SUPPORTED = ['.mp3']
         
     def __init__(self, root):
-        
+        self.setup_first_frame()
+        self.browseButton()        
+        root.bind("<Return>", self.runCombined) # setting for calling function when pressed KEY
+
+    def setup_first_frame(self):
         self.frame1 = Frame(root) # Frame 1
         
         self.button1 = Button(self.frame1,text="Browse Music",height=2,
                               fg='white', bg='blue',
-                              command = self.browseButton)        
+                              command = self.browseButton)
+        self.button1.bind("<Enter>", self.on_enter)
+        self.button1.bind("<Leave>", self.on_leave)
+
         self.label1 = Label(self.frame1,text=f"Path: ",height=2,
                             fg='red')
         
@@ -30,17 +37,6 @@ class GUI:
         self.setup_second_frame()
 
         self.frame1.pack(fill=BOTH)
-
-        self.button1.bind("<Enter>", self.on_enter)
-        self.button1.bind("<Leave>", self.on_leave)
-
-        self.browseButton()
-        
-        # setting for calling function when pressed KEY
-        root.bind("<Return>", self.runCombined)
-
-    def setup_first_frame(self):
-        pass
 
     def setup_second_frame(self):
         self.frame2=Frame(self.frame1) # Frame 2
