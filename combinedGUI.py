@@ -30,41 +30,12 @@ def setArtRunner(files):
         setArt(f'{helper.PATH_MUSIC}/{filename}',f'{helper.PATH_IMAGES}/{filename}.jpg')
     unhide_directory(helper.PATH_ERRORS)
 
-#------------------GET ALBUM ART ------------------#
-def saveImage(sname, link):
-    global headers
-    img_data = requests.get(link, headers=headers).content
-    with open(f'{helper.PATH_IMAGES}/{sname}.jpg', 'wb') as f:
-        f.write(img_data)
-
-def downloadImage(url, query):
-    global headers
-    try:
-        q=query[:-4].replace('&','').replace(' ','+')+' album&size=large'
-        soup = requests.get(url+q, headers=headers).content
-        soup = BeautifulSoup(soup, "html.parser")
-        link = soup.find('a', class_='image-result__link')['href']
-        saveImage(query,link)
-        #print()
-    except:
-        #print('(ERROR)')
-        with open(f'{helper.PATH_ERRORS}/errors(downloadImage).txt','a+') as f:
-            f.write(query+' not found\n')
-
-def getAllArts(files):
-    helper.create_directories()
-    length = len(files)
+def album_arts_runner(files_names):
+    from src.album_art import start_album_arts_runner
     dialog = Dialog('Getting album arts')
-    url='https://www.ecosia.org/images?q='
-    for i in range(length):
-        query = files[i]
-        dialog.changeProgress(i+1,length,files[i])
-        #sleep(1)
-        if query+'.jpg' in listdir(f'{helper.PATH_IMAGES}/'):
-            continue
-        #print(f'{i+1}) {query}', end=' ')
-        downloadImage(url,query)
+    start_album_arts_runner(files_names, dialog)
     dialog.destroy()
+
 
             
 #------------------ ALBUM NUMBER ------------------#            

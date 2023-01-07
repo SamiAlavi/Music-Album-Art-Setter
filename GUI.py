@@ -2,7 +2,7 @@ from tkinter import Tk, Frame, Button, Label, Checkbutton, Listbox, Scrollbar, m
 from tkinter import IntVar, BOTH, RIGHT, BOTTOM, NORMAL, DISABLED, END, W, X
 ########################################################################
 from os import listdir
-from combinedGUI import getAllArts, setArtRunner, getAllLyrics, setLyricsRunner, setAlbum
+from combinedGUI import album_arts_runner, getAllLyrics, setLyricsRunner, setAlbum
 from helper_gui import resource_path, setupQuit
 from src.helper.helper import setPaths
 ########################################################################
@@ -136,9 +136,8 @@ class GUI(Tk):
         if not options:    
             messagebox.showinfo('', "No option selected")
             
-        if self.find_album_arts.get(): 
-            getAllArts(self.files_names) #getAllArts called
-            setArtRunner(self.files_names) #setArtRunner called  
+        if self.find_album_arts.get():
+            album_arts_runner(self.files_names)
         
         if self.find_music_lyrics.get(): 
             getAllLyrics(self.files_names) #getAllLyrics called
