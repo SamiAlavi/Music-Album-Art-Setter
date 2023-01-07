@@ -14,8 +14,8 @@ class GUI:
         
     def __init__(self, root):
         self.setup_first_frame()
-        self.browseButton()        
-        root.bind("<Return>", self.runCombined) # setting for calling function when pressed KEY
+        self.browse_button()        
+        root.bind("<Return>", self.run_combined) # setting for calling function when pressed KEY
 
     def setup_first_frame(self):
         self.frame1 = self.get_first_frame()        
@@ -28,7 +28,7 @@ class GUI:
         
         button = Button(frame,text="Browse Music",height=2,
                               fg='white', bg='blue',
-                              command = self.browseButton)
+                              command = self.browse_button)
         button.bind("<Enter>", self.on_enter)
         button.bind("<Leave>", self.on_leave)
 
@@ -53,7 +53,7 @@ class GUI:
         self.listbox.config(yscrollcommand = scrollbar.set)
         
         self.button2 = Button(self.frame1,text="Run",height=2,
-                              bg='black',state=DISABLED, command=self.runCombined)
+                              bg='black',state=DISABLED, command=self.run_combined)
         self.button2.bind("<Enter>", self.on_enter)
         self.button2.bind("<Leave>", self.on_leave)
 
@@ -74,29 +74,33 @@ class GUI:
     def get_files_names(self):
         return [file_name for file_name in listdir(self.PATH_MUSIC) for extension in self.EXTENSIONS_SUPPORTED if validate_extension(file_name, extension)]
 
-    def browseButton(self):
+    def browse_button(self):
         self.PATH_MUSIC =  filedialog.askdirectory()
         if self.PATH_MUSIC:
-            self.changeLabel()
+            self.update_label()
+            self.update_files_list()
         else:
             self.files_names = list()
             
-    def changeLabel(self):
+    def update_label(self):
         self.label1.configure(text=f"Path: {self.PATH_MUSIC}")
+        #root.after(1000, self.changeLabel)
+
+    def update_files_list(self):
         self.listbox.delete(0,END)
         self.files_names = self.get_files_names()
-        length = len(self.files_names)
-        temp1='     '
-        if length:
+        padding_left = '     '
+
+        if len(self.files_names):
             setPaths(self.PATH_MUSIC)
-            for i in range(length):
-                t=f"\n{temp1}{i+1}) {self.files_names[i]}"
-                self.listbox.insert(END, t) 
-            self.button2.configure(state=NORMAL,fg='white', bg='blue')
+            for index, file_name in enumerate(self.files_names):
+                text = f"\n{padding_left}{index+1}) {file_name}"
+                self.listbox.insert(END, text) 
+            self.button2.configure(state=NORMAL, fg='white', bg='blue')
         else:
-            t = 'No music files found'
+            text = 'No music files found'
             self.button2.configure(state=DISABLED, bg='black')
-        #root.after(1000, self.changeLabel)
+        #root.after(1000, self.update_files_list)
 
     def setup_options(self):
         self.find_album_arts = IntVar()
@@ -111,7 +115,7 @@ class GUI:
         c2.pack(anchor=W, ipadx=10)
         c3.pack(anchor=W, ipadx=10)
     
-    def runCombined(self, event=None):
+    def run_combined(self, event=None):
         if not len(self.files_names):
             return
         # options
