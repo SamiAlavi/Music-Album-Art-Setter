@@ -32,7 +32,7 @@ class GUI:
         self.button1.pack(fill=X)
         self.label1.pack(fill=X)
         
-        self.setupOptions() # options
+        self.setup_options()
         
         self.setup_second_frame()
 
@@ -96,11 +96,15 @@ class GUI:
             self.button2.configure(state=DISABLED, bg='black')
         #root.after(1000, self.changeLabel)
 
-    def setupOptions(self):
-        self.flag1, self.flag2, self.flag3 = IntVar(),IntVar(),IntVar()
-        c1 = Checkbutton(self.frame1, text="Find album arts?", variable=self.flag1, onvalue=1, offvalue=0)
-        c2 = Checkbutton(self.frame1, text="Find music lyrics?", variable=self.flag2, onvalue=1, offvalue=0)
-        c3 = Checkbutton(self.frame1, text="Rename album names?", variable=self.flag3, onvalue=1, offvalue=0)
+    def setup_options(self):
+        self.find_album_arts = IntVar()
+        self.find_music_lyrics = IntVar()
+        self.rename_albums_names = IntVar()
+
+        c1 = Checkbutton(self.frame1, text="Find album arts?", variable=self.find_album_arts, onvalue=1, offvalue=0)
+        c2 = Checkbutton(self.frame1, text="Find music lyrics?", variable=self.find_music_lyrics, onvalue=1, offvalue=0)
+        c3 = Checkbutton(self.frame1, text="Rename album names?", variable=self.rename_albums_names, onvalue=1, offvalue=0)
+        
         c1.pack(anchor=W, ipadx=10)
         c2.pack(anchor=W, ipadx=10)
         c3.pack(anchor=W, ipadx=10)
@@ -109,19 +113,19 @@ class GUI:
         if not len(self.files_names):
             return
         # options
-        options = self.flag1.get() or self.flag2.get() or self.flag3.get()
+        options = self.find_album_arts.get() or self.find_music_lyrics.get() or self.rename_albums_names.get()
         if not options:    
             messagebox.showinfo('', "No option selected")
             
-        if self.flag1.get(): 
+        if self.find_album_arts.get(): 
             getAllArts(self.files_names) #getAllArts called
             setArtRunner(self.files_names) #setArtRunner called  
         
-        if self.flag2.get(): 
+        if self.find_music_lyrics.get(): 
             getAllLyrics(self.files_names) #getAllLyrics called
             setLyricsRunner(self.files_names) #setLyricsRunner called
 
-        if self.flag3.get():           
+        if self.rename_albums_names.get():           
             setAlbum(self.files_names) #setAlbum called
      
         #messagebox.showinfo('', 'Completed')
