@@ -11,6 +11,45 @@ from src.helper.helper_path import validate_extension
 class GUI:
     previous = None
     EXTENSIONS_SUPPORTED = ['.mp3'] #.mp3 supported
+        
+    def __init__(self):   
+        
+        self.frame1=Frame(root) # Frame 1
+        
+        self.button1 = Button(self.frame1,text="Browse Music",height=2,
+                              fg='white', bg='blue',
+                              command = self.browseButton)        
+        self.label1 = Label(self.frame1,text=f"Path: ",height=2,
+                            fg='red')
+        self.button2 = Button(self.frame1,text="Run",height=2,
+                              bg='black',state=DISABLED, command=self.runCombined)
+        
+        self.button1.pack(fill=X)
+        self.label1.pack(fill=X)
+        
+        self.setupOptions() # options
+        
+        self.frame2=Frame(self.frame1) # Frame 2        
+        self.listbox = Listbox(self.frame2)
+        scrollbar = Scrollbar(self.frame2)
+        self.listbox.config(yscrollcommand = scrollbar.set)
+        scrollbar.config(command = self.listbox.yview) 
+
+        scrollbar.pack(fill=BOTH, side=RIGHT)
+        self.listbox.pack(fill=BOTH, side=BOTTOM)        
+        self.button2.pack(fill=BOTH, side=BOTTOM)
+        self.frame2.pack(fill=BOTH)
+        self.frame1.pack(fill=BOTH)
+
+        self.button1.bind("<Enter>", self.on_enter)
+        self.button1.bind("<Leave>", self.on_leave)
+        self.button2.bind("<Enter>", self.on_enter)
+        self.button2.bind("<Leave>", self.on_leave)
+
+        self.browseButton()
+        
+        # setting for calling function when pressed KEY
+        root.bind("<Return>", self.runCombined)
     
     def on_enter(self,e):
         self.previous = e.widget['background']
@@ -81,45 +120,6 @@ class GUI:
             setAlbum(self.files_names) #setAlbum called
      
         #messagebox.showinfo('', 'Completed')
-        
-    def __init__(self):   
-        
-        self.frame1=Frame(root) # Frame 1
-        
-        self.button1 = Button(self.frame1,text="Browse Music",height=2,
-                              fg='white', bg='blue',
-                              command = self.browseButton)        
-        self.label1 = Label(self.frame1,text=f"Path: ",height=2,
-                            fg='red')
-        self.button2 = Button(self.frame1,text="Run",height=2,
-                              bg='black',state=DISABLED, command=self.runCombined)
-        
-        self.button1.pack(fill=X)
-        self.label1.pack(fill=X)
-        
-        self.setupOptions() # options
-        
-        self.frame2=Frame(self.frame1) # Frame 2        
-        self.listbox = Listbox(self.frame2)
-        scrollbar = Scrollbar(self.frame2)
-        self.listbox.config(yscrollcommand = scrollbar.set)
-        scrollbar.config(command = self.listbox.yview) 
-
-        scrollbar.pack(fill=BOTH, side=RIGHT)
-        self.listbox.pack(fill=BOTH, side=BOTTOM)        
-        self.button2.pack(fill=BOTH, side=BOTTOM)
-        self.frame2.pack(fill=BOTH)
-        self.frame1.pack(fill=BOTH)
-
-        self.button1.bind("<Enter>", self.on_enter)
-        self.button1.bind("<Leave>", self.on_leave)
-        self.button2.bind("<Enter>", self.on_enter)
-        self.button2.bind("<Leave>", self.on_leave)
-
-        self.browseButton()
-        
-        # setting for calling function when pressed KEY
-        root.bind("<Return>", self.runCombined)
 
 def setupRoot():
     root = Tk()
