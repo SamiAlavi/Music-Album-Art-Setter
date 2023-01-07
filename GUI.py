@@ -10,11 +10,11 @@ from src.helper.helper_path import validate_extension
 
 class GUI:
     previous = None
-    EXTENSIONS_SUPPORTED = ['.mp3'] #.mp3 supported
+    EXTENSIONS_SUPPORTED = ['.mp3']
         
-    def __init__(self):   
+    def __init__(self, root):
         
-        self.frame1=Frame(root) # Frame 1
+        self.frame1 = Frame(root) # Frame 1
         
         self.button1 = Button(self.frame1,text="Browse Music",height=2,
                               fg='white', bg='blue',
@@ -50,6 +50,12 @@ class GUI:
         
         # setting for calling function when pressed KEY
         root.bind("<Return>", self.runCombined)
+
+    def setup_first_frame(self):
+        pass
+
+    def setup_second_frame(self):
+        pass
     
     def on_enter(self,e):
         self.previous = e.widget['background']
@@ -134,5 +140,5 @@ def setupRoot():
     return root
 
 root = setupRoot()
-gui=GUI()
+gui = GUI(root)
 root.mainloop()
