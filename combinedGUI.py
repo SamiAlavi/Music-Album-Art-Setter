@@ -7,67 +7,38 @@ from eyed3 import load
 import os
 from subprocess import call
 from tkinter import messagebox
+import src.helper.helper as helper
+from src.helper.helper_path import unhide_directory
 #from time import sleep
 ########################################################################
 
 headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
-PATH_MUSIC = None
-PATH_IMAGES = None
-PATH_LYRICS = None
-PATH_ERRORS = None
-root = None
-progress = None
-label1 = None
-value = None
-
-def createDir():
-    global PATH_IMAGES, PATH_LYRICS, PATH_ERRORS
-    for path in [PATH_ERRORS, PATH_IMAGES, PATH_LYRICS]:
-        if not os.path.exists(path):
-            os.makedirs(path)
-    hideUnhideDir('HIDE')
-
-def hideUnhideDir(command):
-    global PATH_ERRORS
-    if command=='HIDE':
-        call(["attrib", "+H", PATH_ERRORS])
-    elif command=='UNHIDE':
-        call(["attrib", "-H", PATH_ERRORS])        
-
-def setPaths(path):
-    global PATH_MUSIC, PATH_IMAGES, PATH_LYRICS, PATH_ERRORS
-    PATH_MUSIC = path
-    PATH_ERRORS = f'{path}/downloads'   
-    PATH_IMAGES = f'{path}/downloads/images'
-    PATH_LYRICS = f'{path}/downloads/lyrics'
 
 #------------------SET ALBUM ART ------------------#
     
 def setArt(song, art):
-    global PATH_IMAGES, PATH_ERRORS
     try:
         mp3=read_tag(song)
         mp3.picture=art
         mp3.write()
     except:
-        with open(f'{PATH_ERRORS}/errors(setArt).txt','a+') as f:
-            f.write(f'{song} not found in {PATH_IMAGES}\n')
+        with open(f'{helper.PATH_ERRORS}/errors(setArt).txt','a+') as f:
+            f.write(f'{song} not found in {helper.PATH_IMAGES}\n')
 
 def setArtRunner(files):
-    global PATH_MUSIC, PATH_IMAGES
     for filename in files:
-        setArt(f'{PATH_MUSIC}/{filename}',f'{PATH_IMAGES}/{filename}.jpg')
-    hideUnhideDir('UNHIDE')
+        setArt(f'{helper.PATH_MUSIC}/{filename}',f'{helper.PATH_IMAGES}/{filename}.jpg')
+    unhide_directory(helper.PATH_ERRORS)
 
 #------------------GET ALBUM ART ------------------#
 def saveImage(sname, link):
-    global headers, PATH_IMAGES
+    global headers
     img_data = requests.get(link, headers=headers).content
-    with open(f'{PATH_IMAGES}/{sname}.jpg', 'wb') as f:
+    with open(f'{helper.PATH_IMAGES}/{sname}.jpg', 'wb') as f:
         f.write(img_data)
 
 def downloadImage(url, query):
-    global headers, PATH_ERRORS
+    global headers
     try:
         q=query[:-4].replace('&','').replace(' ','+')+' album&size=large'
         soup = requests.get(url+q, headers=headers).content
@@ -77,12 +48,11 @@ def downloadImage(url, query):
         #print()
     except:
         #print('(ERROR)')
-        with open(f'{PATH_ERRORS}/errors(downloadImage).txt','a+') as f:
+        with open(f'{helper.PATH_ERRORS}/errors(downloadImage).txt','a+') as f:
             f.write(query+' not found\n')
 
 def getAllArts(files):
-    global PATH_IMAGES
-    createDir()
+    helper.create_directories()
     length = len(files)
     dialog = Dialog('Getting album arts')
     url='https://www.ecosia.org/images?q='
@@ -90,15 +60,15 @@ def getAllArts(files):
         query = files[i]
         dialog.changeProgress(i+1,length,files[i])
         #sleep(1)
-        if query+'.jpg' in listdir(f'{PATH_IMAGES}/'):
+        if query+'.jpg' in listdir(f'{helper.PATH_IMAGES}/'):
             continue
         #print(f'{i+1}) {query}', end=' ')
         downloadImage(url,query)
     dialog.destroy()
+
             
 #------------------ ALBUM NUMBER ------------------#            
 def setAlbum(files):
-    global PATH_MUSIC
     fname = 'count.txt'
     length = len(files)
     dialog = Dialog('Setting album names')
@@ -111,7 +81,7 @@ def setAlbum(files):
     for i in range(length):
         dialog.changeProgress(i+1,length,files[i])
         count+=1
-        mp3=read_tag(f'{PATH_MUSIC}/{files[i]}')
+        mp3=read_tag(f'{helper.PATH_MUSIC}/{files[i]}')
         mp3.album=str(count)
         mp3.write()
         
@@ -125,7 +95,6 @@ def setAlbum(files):
 
 #----------------- SET LYRICS ------------------#
 def setLyrics(song, fname):
-    global PATH_LYRICS, PATH_ERRORS
     try:
         with open(fname,'r', encoding='utf-8') as f:
             lyrics = f.read()
@@ -134,25 +103,23 @@ def setLyrics(song, fname):
         tagg.lyrics.set(lyrics)
         tagg.save(song)
     except:
-        with open(f'{PATH_ERRORS}/errors(setLyrics).txt','a+') as f:
-            f.write(f'{song} not found in {PATH_LYRICS}\n')
+        with open(f'{helper.PATH_ERRORS}/errors(setLyrics).txt','a+') as f:
+            f.write(f'{song} not found in {helper.PATH_LYRICS}\n')
 
 def setLyricsRunner(files):
-    global PATH_MUSIC, PATH_LYRICS
     for filename in files:
-        setLyrics(f'{PATH_MUSIC}/{filename}',f'{PATH_LYRICS}/{filename}.txt')
-    hideUnhideDir('UNHIDE')
+        setLyrics(f'{helper.PATH_MUSIC}/{filename}',f'{helper.PATH_LYRICS}/{filename}.txt')
+    unhide_directory(helper.PATH_ERRORS)
     
 #------------------GET LYRICS ------------------#
 def writelyrics(song, lyrics):
-    global PATH_LYRICS
     if lyrics is not None:
         lyrics = lyrics.replace('’',"'")
-        with open(f'{PATH_LYRICS}/{song}.txt','w', encoding='utf-8') as f:
+        with open(f'{helper.PATH_LYRICS}/{song}.txt','w', encoding='utf-8') as f:
             f.write(lyrics)
 
 def downloadLyrics(url, query):
-    global headers, PATH_ERRORS
+    global headers
     flag = True
     azlyricss = 'azlyrics.com/lyrics'
     letssingit = 'letssingit.com/'
@@ -185,12 +152,11 @@ def downloadLyrics(url, query):
             break
     if flag:
         #print('(ERROR)')
-        with open(f'{PATH_ERRORS}/errors(getLyrics).txt', 'a', encoding='utf-8') as f:
+        with open(f'{helper.PATH_ERRORS}/errors(getLyrics).txt', 'a', encoding='utf-8') as f:
             f.write(query+'\n')
 
 def getAllLyrics(files):
-    global PATH_LYRICS
-    createDir()
+    helper.create_directories()
     length = len(files)
     dialog = Dialog('Getting lyrics')   
     url='https://www.ecosia.org/search?q='
@@ -198,7 +164,7 @@ def getAllLyrics(files):
         query = files[i]
         dialog.changeProgress(i+1,length,files[i])
         #sleep(1)
-        if query+'.txt' in listdir(f'{PATH_LYRICS}/'):
+        if query+'.txt' in listdir(f'{helper.PATH_LYRICS}/'):
             continue
         #print(f'{i+1}) {query}', end=' ')
         downloadLyrics(url,query)

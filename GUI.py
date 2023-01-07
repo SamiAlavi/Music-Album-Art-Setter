@@ -2,8 +2,9 @@ from tkinter import Tk, Frame, Button, Label, Checkbutton, Listbox, Scrollbar, m
 from tkinter import IntVar, BOTH, RIGHT, BOTTOM, NORMAL, DISABLED, END, W, X
 ########################################################################
 from os import listdir
-from combinedGUI import getAllArts, setArtRunner, getAllLyrics, setLyricsRunner, setPaths, setAlbum
+from combinedGUI import getAllArts, setArtRunner, getAllLyrics, setLyricsRunner, setAlbum
 from helper_gui import resource_path, setupQuit
+from src.helper.helper import setPaths
 ########################################################################
 from src.helper.helper_path import validate_extension
 
