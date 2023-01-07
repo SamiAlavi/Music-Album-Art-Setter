@@ -25,29 +25,8 @@ def lyrics_runner(files_names):
     dialog = Dialog('Getting lyrics')
     start_lyrics_runner(files_names, dialog)
     dialog.destroy()
-            
-#------------------ ALBUM NUMBER ------------------#            
-def setAlbum(files):
-    fname = 'count.txt'
-    length = len(files)
-    dialog = Dialog('Setting album names')
-    try:
-        with open(fname, 'r') as f:
-            count=int(f.read())
-    except:
-        count=0
-    
-    for i in range(length):
-        dialog.changeProgress(i+1,length,files[i])
-        count+=1
-        mp3=read_tag(f'{helper.PATH_MUSIC}/{files[i]}')
-        mp3.album=str(count)
-        mp3.write()
-        
-    dialog.destroy()
-    try:
-        with open(fname, 'w') as f:
-            f.write(str(count))
-    except:
-        error = 'Failed to write count.txt\nGive write permissions'        
-        messagebox.showinfo('Error',error,icon="warning")
+
+def album_names_runner(files_names):
+    from src.album_name import start_album_names_runner
+    update_callback = lambda error: messagebox.showinfo('Error', error, icon="warning")
+    start_album_names_runner(files_names, update_callback)

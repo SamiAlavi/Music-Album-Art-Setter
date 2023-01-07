@@ -4,7 +4,7 @@ from tkinter import IntVar, BOTH, RIGHT, BOTTOM, NORMAL, DISABLED, END, W, X
 from os import listdir
 import sys
 from NullIO import NullIO
-from combinedGUI import album_arts_runner, lyrics_runner, setAlbum
+from combinedGUI import album_arts_runner, lyrics_runner, album_names_runner
 from helper_gui import resource_path, setupQuit
 from src.helper.helper import setPaths
 ########################################################################
@@ -144,8 +144,8 @@ class GUI(Tk):
         if self.find_music_lyrics.get():
             lyrics_runner(self.files_names)
 
-        if self.rename_albums_names.get():           
-            setAlbum(self.files_names) #setAlbum called
+        if self.rename_albums_names.get():
+            album_names_runner(self.files_names)
      
         #messagebox.showinfo('', 'Completed')
 
