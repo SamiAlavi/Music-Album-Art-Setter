@@ -26,3 +26,6 @@ def hide_directory(path_directory):
 
 def unhide_directory(path_directory):
     call(["attrib", "-H", path_directory])
+
+def validate_extension(file_name, extension):
+    return file_name.lower().endswith(extension)

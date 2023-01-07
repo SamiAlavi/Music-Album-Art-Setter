@@ -3,9 +3,7 @@ if __name__ != '__main__':
 
 from os import listdir
 from src.helper.helper import setPaths
-
-def validate_extension(file_name, extension):
-    return file_name.lower().endswith(extension)
+from src.helper.helper_path import validate_extension
 
 def is_yes_option_selected(option):
     return option == 'y'
