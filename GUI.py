@@ -1,6 +1,5 @@
-from tkinter import *
-from tkinter import messagebox
-from tkinter import filedialog
+from tkinter import Tk, Frame, Button, Label, Checkbutton, Listbox, Scrollbar, messagebox, filedialog
+from tkinter import IntVar, BOTH, RIGHT, BOTTOM, NORMAL, DISABLED, END, W, X
 ########################################################################
 from os import listdir
 from combinedGUI import getAllArts, setArtRunner, getAllLyrics, setLyricsRunner

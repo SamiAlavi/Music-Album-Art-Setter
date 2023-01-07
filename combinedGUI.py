@@ -1,5 +1,5 @@
-from tkinter import *
-from tkinter import messagebox
+from tkinter import Tk, Label, messagebox
+from tkinter import HORIZONTAL, LEFT
 from tkinter.ttk import Progressbar
 ########################################################################
 import requests
