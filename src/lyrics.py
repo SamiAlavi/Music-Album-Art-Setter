@@ -1,9 +1,8 @@
 from os import listdir
 from eyed3 import load
-from helper import create_directories
-from helper import PATH_MUSIC, PATH_LYRICS, PATH_ERRORS
-from helper_request import getParseableSoup
-from helper_path import unhide_directory, read_file, append_error_to_file, write_to_file
+from .helper.helper import create_directories, PATH_MUSIC, PATH_LYRICS, PATH_ERRORS
+from .helper.helper_request import getParseableSoup
+from .helper.helper_path import unhide_directory, read_file, append_error_to_file, write_to_file
 
 #----------------- SET LYRICS ------------------#
 def setLyrics(music_file_path, lyrics_file_path):

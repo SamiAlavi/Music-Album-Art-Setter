@@ -1,10 +1,9 @@
 from os import listdir
 from json import loads
 from stagger import read_tag
-from helper import create_directories
-from helper import PATH_MUSIC, PATH_IMAGES, PATH_ERRORS
-from helper_request import getUrlContent, getParseableSoup
-from helper_path import unhide_directory, append_error_to_file, write_bytes_to_file
+from .helper.helper import create_directories, PATH_MUSIC, PATH_IMAGES, PATH_ERRORS
+from .helper.helper_request import getUrlContent, getParseableSoup
+from .helper.helper_path import unhide_directory, append_error_to_file, write_bytes_to_file
 
 #------------------SET ALBUM ART ------------------#
 def setArt(music_file_path, image_file_path):

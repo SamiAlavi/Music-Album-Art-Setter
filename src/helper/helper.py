@@ -1,5 +1,5 @@
 import os
-from helper_path import hide_directory, createDirectory
+from .helper_path import hide_directory, createDirectory
 
 PATH_MUSIC = None
 PATH_IMAGES = None

@@ -1,6 +1,6 @@
 from stagger import read_tag
-from helper import PATH_MUSIC
-from helper_path import read_file, write_to_file
+from .helper.helper import PATH_MUSIC
+from .helper.helper_path import read_file, write_to_file
 
 #------------------ ALBUM NUMBER ------------------#            
 def setAlbum(files_names):

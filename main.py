@@ -2,7 +2,7 @@ if __name__ != '__main__':
     exit()
 
 from os import listdir
-from helper import setPaths
+from src.helper.helper import setPaths
 
 def validate_extension(file_name, extension):
     return file_name.lower().endswith(extension)
@@ -33,13 +33,13 @@ files_names = [file_name for file_name in listdir(PATH_MUSIC) for extension in E
 print(f'\nTotal files: {len(files_names)}')
 
 if find_album_arts:
-    from album_art import start_album_arts_runner
+    from src.album_art import start_album_arts_runner
     start_album_arts_runner(files_names)
 
 if find_music_lyrics:
-    from lyrics import start_lyrics_runner
+    from src.lyrics import start_lyrics_runner
     start_lyrics_runner(files_names)
 
 if rename_albums_names:
-    from album_name import start_album_names_runner
+    from src.album_name import start_album_names_runner
     start_album_names_runner(files_names)
