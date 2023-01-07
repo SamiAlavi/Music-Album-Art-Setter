@@ -1,7 +1,11 @@
 from tkinter import Tk, Label
 from tkinter import HORIZONTAL, LEFT
 from tkinter.ttk import Progressbar
-from helper_gui import resource_path, setupQuit
+from helper_gui import APP_ICON
+from helper_gui import TITLE_INFO, TITLE_APP_QUIT, EMPTY_STR
+from helper_gui import TEXT_DIALOG_QUIT
+from helper_gui import COLOR_RED
+from helper_gui import resource_path, setup_quit_button
 
 class Dialog():
 
@@ -9,14 +13,16 @@ class Dialog():
         root = Tk()
 
         #global root, progress, label1, value
-        root.iconbitmap(resource_path('music.ico'))
-        root.title('Info')
-        root.geometry('500x100')
+        root.iconbitmap(resource_path(APP_ICON))
+        root.title(TITLE_INFO)
+        width, height = 500, 100
+        geometry = f'{width}x{height}'
+        root.geometry(geometry)
         root.resizable(0,0)
-        setupQuit(root, 'Close?', 'Process is running\nAre you sure you want to close?')
+        setup_quit_button(root, TITLE_APP_QUIT, TEXT_DIALOG_QUIT)
         
-        Label(root,text=text,height=2, fg='red').pack(padx=10)
-        self.label1 = Label(root,text='',height=2)
+        Label(root,text=text,height=2, fg=COLOR_RED).pack(padx=10)
+        self.label1 = Label(root,text=EMPTY_STR,height=2)
         self.progress = Progressbar(root, orient=HORIZONTAL, 
                 length=400,maximum=1, mode='determinate')
         self.value = Label(root,text='',height=2)
