@@ -1,14 +1,13 @@
+
+import sys
+from os import listdir
 from tkinter import Tk, Frame, Button, Label, Checkbutton, Listbox, Scrollbar, messagebox, filedialog
 from tkinter import IntVar, BOTH, RIGHT, BOTTOM, NORMAL, DISABLED, END, W, X
-########################################################################
-from os import listdir
-import sys
 from NullIO import NullIO
-from combinedGUI import album_arts_runner, lyrics_runner, album_names_runner
-from helper_gui import resource_path, setupQuit
 from src.helper.helper import setPaths
-########################################################################
 from src.helper.helper_path import validate_extension
+from helper_gui import resource_path, setupQuit
+from combinedGUI import album_arts_runner, lyrics_runner, album_names_runner
 
 class GUI(Tk):
     previous_widget_color = None
