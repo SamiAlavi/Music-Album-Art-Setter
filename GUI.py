@@ -9,7 +9,7 @@ from combinedGUI import setPaths, setAlbum, setupQuit, resource_path
 from src.helper.helper_path import validate_extension
 
 class GUI:
-    previous = None
+    previous_widget_color = None
     EXTENSIONS_SUPPORTED = ['.mp3']
         
     def __init__(self, root):
@@ -63,12 +63,13 @@ class GUI:
 
         return frame
     
-    def on_enter(self,e):
-        self.previous = e.widget['background']
-        if not self.previous=='black':
-            e.widget['background'] = '#0000b2'
-    def on_leave(self,e):
-        e.widget['background'] = self.previous
+    def on_enter(self, event):
+        self.previous_widget_color = event.widget['background']
+        if not self.previous_widget_color=='black':
+            event.widget['background'] = '#0000b2'
+
+    def on_leave(self, event):
+        event.widget['background'] = self.previous_widget_color
         
     def toggle(self):
         if self.t_btn.config('text')[-1] == 'True':
