@@ -1,29 +1,33 @@
 # Music-Album-Art-Setter
 Music metadata editor which automatically sets album covers, album names and lyrics for the given mp3 files
 
-Powered by 
-<a href="https://www.bing.com/" target="_blank">
-  <img title="Microsoft Bing" alt="Microsoft Bing" width="150" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Microsoft_Bing_logo.svg/220px-Microsoft_Bing_logo.svg.png"/>
-</a>
-, 
-<a href="https://www.yahoo.com/" target="_blank">
-  <img title="Yahoo" alt="Yahoo" width="100" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Yahoo%21_%282019%29.svg/220px-Yahoo%21_%282019%29.svg.png"/>
-</a>
-, 
-<a href="https://www.azlyrics.com/" target="_blank">
-  <img title="AZLyrics" alt="AZLyrics" width="30" src="https://www.azlyrics.com/az_logo_tr.png"/>
-</a>
+## Powered by 
+- [Microsoft Bing](https://www.bing.com/)
+- [Yahoo!](https://search.yahoo.com/)
+- [AZLyrics](https://www.azlyrics.com/)
+- [LetsSingIt](https://www.letssingit.com/)
+- [LyricsBOX](https://www.lyricsbox.com/)
+
+## Releases
+- Latest release can be found it on the [Releases](https://github.com/SamiAlavi/Music-Album-Art-Setter/releases) page
 
 ## Instructions
-### For Python Script
-1) Make sure you have python and pip installed (https://www.python.org/)
+
+### OS Support
+- Windows
+- Linux
+
+### Installation
+1) Make sure you have [Python](https://www.python.org/) and [pip](https://pip.pypa.io/en/stable/installation/) installed
 2) Clone this repository
 3) Run `pip install -r requirements.txt`
-4) Copy your music in the `./Music` directory
-5) Run `main.py`
+
+### For Python Script
+1) Copy your music in the `./Music` directory
+2) Run `python main.py`
 
 ### For Python GUI
-1) Download `music_setter.exe` from [Releases(v1.0.0)](https://github.com/SamiAlavi/Music-Album-Art-Setter/releases/tag/v1.0.0 "Releases(v1.0.0)") 
+1) Run `python GUI.py`
 2) Locate your music directory using Browse
 3) Check options that you need (album_art, music_lyrics, album_name)
 4) Click Run
@@ -31,6 +35,9 @@ Powered by
 6) `Song Lyrics` will be downloaded in `YOUR_MUSIC_DIR/downloads/lyrics/`
 7) `Album Names` are currently set using the `count.txt` file
 8) `Errors` can be checked from files created in `YOUR_MUSIC_DIR/downloads/`
+
+### Build
+- Run `python build.py`
 
 ## Future work
 - Get correct `Album Names` from the internet
