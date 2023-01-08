@@ -40,6 +40,8 @@ Music metadata editor which automatically sets album covers, album names and lyr
 - Run `python build.py`
 
 ## Future work
+- Write unit tests
+- CI/CD and automation
 - Get correct `Album Names` from the internet
 - Support for other audio formats
 - Get `Album Arts`, `Lyrics`, `Album Names` from API instead of Web Scraping
