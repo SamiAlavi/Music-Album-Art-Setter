@@ -153,7 +153,7 @@ class GUI(Tk):
         if rename_albums_names:
             album_names_runner(self.files_names)
      
-        #messagebox.showinfo(NO_TITLE, COMPLETED_TITLE)
+        #messagebox.showinfo(EMPTY_STR, TITLE_COMPLETED)
 
 sys.stdout = NullIO()
 gui = GUI()

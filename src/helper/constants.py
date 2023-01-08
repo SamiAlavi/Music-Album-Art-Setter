@@ -44,3 +44,13 @@ EXTENSIONS_SUPPORTED = [EXTENSION_MP3]
 PLATFORM_WINDOWS = 'win32'
 PLATFORM_LINUX = 'linux'
 PLATFORM_OSX = 'darwin'
+
+DIR_DOWNLOADS = 'downloads'
+DIR_IMAGES = 'images'
+DIR_LYRICS = 'lyrics'
+
+FILE_COUNT = 'count.txt'
+FILE_ERROR_ART_GET = 'errors(getImage).txt'
+FILE_ERROR_ART_SET = 'errors(setArt).txt'
+FILE_ERROR_LYRICS_GET = 'errors(getLyrics).txt'
+FILE_ERROR_LYRICS_SET = 'errors(setLyrics).txt'

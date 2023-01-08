@@ -1,9 +1,9 @@
 from os import listdir
 from json import loads
 from stagger import read_tag
-from .helper.constants import EXTENSION_JPG
-from .helper.helper import create_directories, get_update_callback, join_paths
+from .helper.constants import EXTENSION_JPG, FILE_ERROR_ART_GET, FILE_ERROR_ART_SET
 from .helper.helper import PATH_MUSIC, PATH_IMAGES, PATH_ERRORS
+from .helper.helper import create_directories, get_update_callback, join_paths
 from .helper.helper_request import getUrlContent, getParseableSoup
 from .helper.helper_path import unhide_directory, append_error_to_file, write_bytes_to_file
 
@@ -15,7 +15,7 @@ def setArt(music_file_path, image_file_path):
         music.picture = image_file_path
         music.write()
     except Exception as exception:
-        error_file_path = join_paths(PATH_ERRORS, 'errors(setArt).txt')
+        error_file_path = join_paths(PATH_ERRORS, FILE_ERROR_ART_SET)
         error_message = f'Error setting image of {music_file_path}'
         append_error_to_file(error_file_path, error_message, exception)
 
@@ -47,7 +47,7 @@ def downloadImage(file_name):
         print()
     except Exception as exception:
         print('(ERROR)')
-        error_file_path = join_paths(PATH_ERRORS, 'errors(getImage).txt')
+        error_file_path = join_paths(PATH_ERRORS, FILE_ERROR_ART_GET)
         error_message = f'{file_name} image not found'
         append_error_to_file(error_file_path, error_message, exception)
 

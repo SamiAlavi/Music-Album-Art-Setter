@@ -1,9 +1,11 @@
 import sys
 from os import path, makedirs
-from subprocess import call
 from .constants import PLATFORM_WINDOWS
 
 IS_PLATFORM_WINDOWS = sys.platform == PLATFORM_WINDOWS
+
+if IS_PLATFORM_WINDOWS:    
+    from subprocess import call
 
 def createDirectory(path_directory):
     if not path.exists(path_directory):

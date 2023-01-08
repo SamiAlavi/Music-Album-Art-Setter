@@ -1,7 +1,8 @@
 from os import listdir
 from eyed3 import load
-from .helper.helper import create_directories, get_update_callback, join_paths
+from .helper.constants import FILE_ERROR_LYRICS_GET, FILE_ERROR_LYRICS_SET
 from .helper.helper import PATH_MUSIC, PATH_LYRICS, PATH_ERRORS
+from .helper.helper import create_directories, get_update_callback, join_paths
 from .helper.helper_request import getParseableSoup
 from .helper.helper_path import unhide_directory, read_file, append_error_to_file, write_to_file
 
@@ -15,7 +16,7 @@ def setLyrics(music_file_path, lyrics_file_path):
         tagg.lyrics.set(lyrics)
         tagg.save(music_file_path)
     except Exception as exception:
-        error_file_path = join_paths(PATH_ERRORS, 'errors(setLyrics).txt')
+        error_file_path = join_paths(PATH_ERRORS, FILE_ERROR_LYRICS_SET)
         error_message = f'Error setting lyrics of {music_file_path}'
         append_error_to_file(error_file_path, error_message, exception)
 
@@ -76,7 +77,7 @@ def downloadLyrics(file_name):
             return
     
     print('(ERROR)')
-    path_error_file = join_paths(PATH_ERRORS, 'errors(getLyrics).txt')
+    path_error_file = join_paths(PATH_ERRORS, FILE_ERROR_LYRICS_GET)
     error_message = f'{file_name} lyrics not found'
     append_error_to_file(path_error_file, error_message, None)
 
