@@ -36,3 +36,6 @@ def setup_quit_button(root, title, text):
 def quitDialog(root, title, text):
     if messagebox.askokcancel(title, text, icon=ICON_WARNING):
         root.destroy()
+
+def get_geometry(width, height):
+    return f'{width}x{height}'

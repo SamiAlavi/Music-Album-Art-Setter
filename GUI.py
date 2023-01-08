@@ -12,7 +12,7 @@ from src.helper.constants import EVENT_RETURN, EVENT_ENTER, EVENT_LEAVE
 from src.helper.constants import COLOR_WHITE, COLOR_BLUE, COLOR_RED, COLOR_BLACK, COLOR_DARK_BLUE
 from src.helper.helper import setPaths
 from src.helper.helper_path import validate_extension
-from src.helper.helper_gui import get_music_icon_path, setup_quit_button
+from src.helper.helper_gui import get_music_icon_path, setup_quit_button, get_geometry
 from src.gui.NullIO import NullIO
 from src.gui.combinedGUI import album_arts_runner, lyrics_runner, album_names_runner
 
@@ -31,7 +31,7 @@ class GUI(Tk):
         self.iconbitmap(get_music_icon_path())
         self.title(APP_TITLE)
         width, height = 500, 300
-        geometry = f'{width}x{height}'
+        geometry = get_geometry(width, height)
         self.geometry(geometry)
         self.lift()
         self.focus_force()
