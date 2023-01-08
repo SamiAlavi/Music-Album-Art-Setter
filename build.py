@@ -1,9 +1,12 @@
 import sys
+import shutil
+import os
 import pyinstaller_versionfile
 import PyInstaller.__main__
 from src.helper.constants import PLATFORM_WINDOWS, PLATFORM_LINUX, PLATFORM_OSX
 from src.helper.constants import APP_ICON_DIR, APP_ICON, EXTENSION_XBM, EXTENSION_ICO
 from src.helper.helper import join_paths
+from src.helper.helper_path import is_file
 
 def get_music_icon_path():
     extension = EXTENSION_ICO # default icon extension currently set as ICO
@@ -46,6 +49,17 @@ def build():
         f'--name={distribution_name}-v{version}-{platform}',
         f'{script_name}',
     ])
+    clean_up()
+
+def clean_up():
+    print('*** Cleaning Up ***')
+    dir_build = 'build'
+    
+    shutil.rmtree(dir_build, ignore_errors=True)
+    os.remove(version_file_name)
+    for file_name in os.listdir():
+        if file_name.endswith('.spec'):
+            os.remove(file_name)
 
 
 distribution_name = 'music_setter'
