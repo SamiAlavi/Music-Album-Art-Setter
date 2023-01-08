@@ -1,14 +1,14 @@
 import sys
 import PyInstaller.__main__
-from src.helper.helper_gui import APP_ICON, PLATFORM_WINDOWS, PLATFORM_LINUX, PLATFORM_OSX, EXTENSION_XBM, EXTENSION_ICO
+from src.helper.helper_gui import APP_ICON_DIR, APP_ICON, PLATFORM_WINDOWS, PLATFORM_LINUX, PLATFORM_OSX, EXTENSION_XBM, EXTENSION_ICO
 
-def get_icon_path(icon_name):
+def get_music_icon_path():
     extension = EXTENSION_ICO
     if sys.platform == PLATFORM_LINUX or sys.platform == PLATFORM_OSX:
         extension = EXTENSION_XBM
     elif sys.platform == PLATFORM_WINDOWS:
         extension = EXTENSION_ICO
-    return f'{icon_name}.{extension}'
+    return f'{APP_ICON_DIR}/{APP_ICON}.{extension}'
 
 def get_add_data_separator():
     if sys.platform == PLATFORM_LINUX or sys.platform == PLATFORM_OSX:
@@ -17,14 +17,14 @@ def get_add_data_separator():
         return ';'
     return ';'
 
-icon_path = get_icon_path(APP_ICON)
+icon_path = get_music_icon_path()
 distribution_name = 'GUI'
 script_name = 'GUI.py'
 add_data_separator = get_add_data_separator()
 
 PyInstaller.__main__.run([
     '--add-data',
-    f'{icon_path}{add_data_separator}.',
+    f'{icon_path}{add_data_separator}{APP_ICON_DIR}',
     '--windowed',
     '--clean',
     '--noconfirm',

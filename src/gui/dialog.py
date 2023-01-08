@@ -2,7 +2,6 @@ from tkinter import Tk, Label
 from tkinter import HORIZONTAL, LEFT
 from tkinter.ttk import Progressbar
 from ..helper import *
-from ..helper.helper_gui import APP_ICON
 from ..helper.helper_gui import TITLE_INFO, TITLE_APP_QUIT, EMPTY_STR
 from ..helper.helper_gui import TEXT_DIALOG_QUIT
 from ..helper.helper_gui import COLOR_RED
@@ -13,7 +12,7 @@ class Dialog():
     def __init__(self, text):
         root = Tk()
 
-        root.iconbitmap(get_music_icon_path(APP_ICON))
+        root.iconbitmap(get_music_icon_path())
         root.title(TITLE_INFO)
         width, height = 500, 100
         geometry = f'{width}x{height}'
