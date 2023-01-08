@@ -57,6 +57,7 @@ def getAllArts(files_names, update_callback):
         image_file_name = f'{file_name}.jpg'
         update_callback(index+1, length, file_name)
         if image_file_name in listdir(PATH_IMAGES): # prevent re-downloading of images with same names
+            print()
             continue
         downloadImage(file_name)
 

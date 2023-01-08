@@ -87,8 +87,8 @@ def getAllLyrics(files_names, update_callback):
         lyrics_file_name = f'{file_name}.txt'
         update_callback(index+1, length, file_name)
         if lyrics_file_name in listdir(PATH_LYRICS): # prevent re-downloading of lyrics with same names
+            print()
             continue
-        print(f'{index+1}) {file_name}', end=' ')
         downloadLyrics(file_name)
 
 def start_lyrics_runner(files_names, dialog=None):    
