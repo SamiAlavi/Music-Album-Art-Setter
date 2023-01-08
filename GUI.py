@@ -123,7 +123,7 @@ class GUI(Tk):
         self.find_music_lyrics = IntVar()
         self.rename_albums_names = IntVar()
 
-        c1 = Checkbutton(self.frame1, text=TEXT_ALBUM_NAMES, variable=self.find_album_arts, onvalue=1, offvalue=0)
+        c1 = Checkbutton(self.frame1, text=TEXT_ALBUM_ARTS, variable=self.find_album_arts, onvalue=1, offvalue=0)
         c2 = Checkbutton(self.frame1, text=TEXT_LYRICS, variable=self.find_music_lyrics, onvalue=1, offvalue=0)
         c3 = Checkbutton(self.frame1, text=TEXT_ALBUM_NAMES, variable=self.rename_albums_names, onvalue=1, offvalue=0)
 
