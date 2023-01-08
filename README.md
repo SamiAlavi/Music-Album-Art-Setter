@@ -37,5 +37,14 @@ Powered by
 # Future work
 - Get correct `Album Names` from the internet
 - Support for other audio formats
-- Convert from Python3 to Node.js to support Dynamic Javascipt Websites and use [Nightmare](https://github.com/segmentio/nightmare)
 - Get `Album Arts`, `Lyrics`, `Album Names` from API instead of Web Scraping
+- Use better GUI libraries
+- Web Application
+    - User enters music name in an input
+    - Server sends the album art and lyrics (if available)
+- Lyrics with timestamps
+    - Get [.lrc](https://en.wikipedia.org/wiki/LRC_(file_format)) files
+    - Get timestamps for lyrics using API
+    - Match lyrics' lines with song using AI and get the timestamp
+- Migration
+    - Convert from `Python3` to `Node.js` to support Dynamic Javascript Websites using [Nightmare](https://github.com/segmentio/nightmare)
