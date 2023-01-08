@@ -1,3 +1,4 @@
+from platform import platform
 import sys
 from tkinter import messagebox
 from .constants import APP_ICON_DIR, APP_ICON
@@ -7,14 +8,16 @@ from .constants import ICON_WARNING
 from .helper_path import join_paths, is_file, get_current_absolute_path
 
 def get_music_icon_path():
-    icon_path = join_paths(APP_ICON_DIR, APP_ICON)
-
     prefix = ''
     extension = EXTENSION_ICO # default icon extension currently set as ICO
-    if sys.platform == PLATFORM_LINUX or sys.platform == PLATFORM_OSX:
+    platform = sys.platform
+    icon_path = join_paths(APP_ICON_DIR, APP_ICON)
+
+
+    if platform == PLATFORM_LINUX or platform == PLATFORM_OSX:
         prefix = '@' # TCLError bitmap not defined if path not prefixed with @
         extension = EXTENSION_XBM
-    elif sys.platform == PLATFORM_WINDOWS:
+    elif platform == PLATFORM_WINDOWS:
         extension = EXTENSION_ICO
 
     absolute_path = f'{resource_path(icon_path)}.{extension}'
