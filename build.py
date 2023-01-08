@@ -3,7 +3,7 @@ import PyInstaller.__main__
 from src.helper.helper_gui import APP_ICON_DIR, APP_ICON, PLATFORM_WINDOWS, PLATFORM_LINUX, PLATFORM_OSX, EXTENSION_XBM, EXTENSION_ICO
 
 def get_music_icon_path():
-    extension = EXTENSION_ICO
+    extension = EXTENSION_ICO # default icon extension currently set as ICO
     if sys.platform == PLATFORM_LINUX or sys.platform == PLATFORM_OSX:
         extension = EXTENSION_XBM
     elif sys.platform == PLATFORM_WINDOWS:

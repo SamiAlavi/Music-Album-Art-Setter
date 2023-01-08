@@ -46,12 +46,18 @@ PLATFORM_LINUX = 'linux'
 PLATFORM_OSX = 'darwin'
 
 def get_music_icon_path():
-    icon_path = f'{APP_ICON_DIR}/{APP_ICON}'
-    absolute_path = resource_path(icon_path)
+    icon_path = os.path.join(APP_ICON_DIR, APP_ICON)
+
+    extension = EXTENSION_ICO # default icon extension currently set as ICO
     if sys.platform == PLATFORM_LINUX or sys.platform == PLATFORM_OSX:
-        return f'@{absolute_path}.{EXTENSION_XBM}'
+        extension = EXTENSION_XBM
     elif sys.platform == PLATFORM_WINDOWS:
-        return f'{absolute_path}.{EXTENSION_ICO}'
+        extension = EXTENSION_ICO
+
+    absolute_path = f'{resource_path(icon_path)}.{extension}'
+    if os.path.isfile(absolute_path):
+        return absolute_path
+
     return None
 
 def resource_path(relative_path):    
@@ -59,6 +65,8 @@ def resource_path(relative_path):
         base_path = sys._MEIPASS
     except Exception:
         base_path = os.path.abspath('.')
+    if sys.platform == PLATFORM_LINUX or sys.platform == PLATFORM_OSX:
+        base_path = f'@{base_path}'
     return os.path.join(base_path, relative_path)
 
 def setup_quit_button(root, title, text):
