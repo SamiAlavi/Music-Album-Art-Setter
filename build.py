@@ -25,6 +25,7 @@ script_name = 'GUI.py'
 add_data_separator = get_add_data_separator()
 
 PyInstaller.__main__.run([
+    '--onefile',
     '--add-data',
     f'{icon_path}{add_data_separator}{APP_ICON_DIR}',
     '--windowed',
