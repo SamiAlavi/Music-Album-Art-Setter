@@ -3,16 +3,16 @@ import sys
 from os import listdir
 from tkinter import Tk, Frame, Button, Label, Checkbutton, Listbox, Scrollbar, messagebox, filedialog
 from tkinter import IntVar, BOTH, RIGHT, BOTTOM, NORMAL, DISABLED, END, W, X
+from src.helper.constants import EXTENSIONS_SUPPORTED
+from src.helper.constants import APP_TITLE, EMPTY_STR
+from src.helper.constants import TITLE_APP_QUIT, TITLE_COMPLETED
+from src.helper.constants import TEXT_APP_QUIT, TEXT_NO_OPTIONS, TEXT_NO_MUSIC_FILES, TEXT_BROWSE, TEXT_RUN, TEXT_PATH
+from src.helper.constants import TEXT_ALBUM_ARTS, TEXT_LYRICS, TEXT_ALBUM_NAMES
+from src.helper.constants import EVENT_RETURN, EVENT_ENTER, EVENT_LEAVE
+from src.helper.constants import COLOR_WHITE, COLOR_BLUE, COLOR_RED, COLOR_BLACK, COLOR_DARK_BLUE
 from src.helper.helper import setPaths
-from src.helper.helper import EXTENSIONS_SUPPORTED
 from src.helper.helper_path import validate_extension
 from src.helper.helper_gui import get_music_icon_path, setup_quit_button
-from src.helper.helper_gui import APP_TITLE, EMPTY_STR
-from src.helper.helper_gui import TITLE_APP_QUIT, TITLE_COMPLETED
-from src.helper.helper_gui import TEXT_APP_QUIT, TEXT_NO_OPTIONS, TEXT_NO_MUSIC_FILES, TEXT_BROWSE, TEXT_RUN, TEXT_PATH
-from src.helper.helper_gui import TEXT_ALBUM_ARTS, TEXT_LYRICS, TEXT_ALBUM_NAMES
-from src.helper.helper_gui import EVENT_RETURN, EVENT_ENTER, EVENT_LEAVE
-from src.helper.helper_gui import COLOR_WHITE, COLOR_BLUE, COLOR_RED, COLOR_BLACK, COLOR_DARK_BLUE
 from src.gui.NullIO import NullIO
 from src.gui.combinedGUI import album_arts_runner, lyrics_runner, album_names_runner
 

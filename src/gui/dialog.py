@@ -1,9 +1,7 @@
 from tkinter import Tk, Label
 from tkinter import HORIZONTAL, LEFT
 from tkinter.ttk import Progressbar
-from ..helper.helper_gui import TITLE_INFO, TITLE_APP_QUIT, EMPTY_STR
-from ..helper.helper_gui import TEXT_DIALOG_QUIT
-from ..helper.helper_gui import COLOR_RED
+from ..helper.constants import TITLE_INFO, TITLE_APP_QUIT, EMPTY_STR, TEXT_DIALOG_QUIT, COLOR_RED
 from ..helper.helper_gui import get_music_icon_path, setup_quit_button
 
 class Dialog():

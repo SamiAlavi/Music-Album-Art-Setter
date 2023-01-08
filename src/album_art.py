@@ -1,8 +1,9 @@
 from os import listdir
 from json import loads
 from stagger import read_tag
+from .helper.constants import EXTENSION_JPG
 from .helper.helper import create_directories, get_update_callback, join_paths
-from .helper.helper import PATH_MUSIC, PATH_IMAGES, PATH_ERRORS, EXTENSION_JPG
+from .helper.helper import PATH_MUSIC, PATH_IMAGES, PATH_ERRORS
 from .helper.helper_request import getUrlContent, getParseableSoup
 from .helper.helper_path import unhide_directory, append_error_to_file, write_bytes_to_file
 

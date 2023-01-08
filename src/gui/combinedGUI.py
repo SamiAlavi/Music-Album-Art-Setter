@@ -1,7 +1,6 @@
 from tkinter import messagebox
 from .dialog import Dialog
-from ..helper.helper_gui import TITLE_ALBUM_ARTS, TITLE_LYRICS, TITLE_ERROR
-from ..helper.helper_gui import ICON_WARNING
+from ..helper.constants import TITLE_ALBUM_ARTS, TITLE_LYRICS, TITLE_ERROR, ICON_WARNING
 
 def album_arts_runner(files_names):
     from ..album_art import start_album_arts_runner

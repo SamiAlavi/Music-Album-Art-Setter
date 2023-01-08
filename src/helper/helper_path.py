@@ -1,7 +1,7 @@
 import sys
 from os import path, makedirs
 from subprocess import call
-from src.helper.helper_gui import PLATFORM_WINDOWS
+from .constants import PLATFORM_WINDOWS
 
 IS_PLATFORM_WINDOWS = sys.platform == PLATFORM_WINDOWS
 
@@ -34,7 +34,7 @@ def unhide_directory(path_directory):
         call(["attrib", "-H", path_directory])
 
 def validate_extension(file_name, extension):
-    return file_name.lower().endswith(extension)
+    return file_name.lower().endswith(f'.{extension}')
 
 def join_paths(*paths):
     return path.join(*paths)

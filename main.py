@@ -2,8 +2,8 @@ if __name__ != '__main__':
     exit()
 
 from os import listdir
+from src.helper.constants import EXTENSIONS_SUPPORTED
 from src.helper.helper import setPaths
-from src.helper.helper import EXTENSIONS_SUPPORTED
 from src.helper.helper_path import validate_extension
 
 def is_yes_option_selected(option):
