@@ -3,6 +3,7 @@ if __name__ != '__main__':
 
 from os import listdir
 from src.helper.helper import setPaths
+from src.helper.helper import EXTENSIONS_SUPPORTED
 from src.helper.helper_path import validate_extension
 
 def is_yes_option_selected(option):
@@ -20,7 +21,6 @@ def get_user_input(message):
     return is_yes_option_selected(user_input)
     
 PATH_MUSIC = 'Music'
-EXTENSIONS_SUPPORTED = ['.mp3']
 
 find_album_arts = get_user_input('Find album arts? (n/Y) ')
 find_music_lyrics = get_user_input('Find music lyrics? (N/y) ')

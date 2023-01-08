@@ -4,6 +4,7 @@ from os import listdir
 from tkinter import Tk, Frame, Button, Label, Checkbutton, Listbox, Scrollbar, messagebox, filedialog
 from tkinter import IntVar, BOTH, RIGHT, BOTTOM, NORMAL, DISABLED, END, W, X
 from src.helper.helper import setPaths
+from src.helper.helper import EXTENSIONS_SUPPORTED
 from src.helper.helper_path import validate_extension
 from src.helper.helper_gui import get_music_icon_path, setup_quit_button
 from src.helper.helper_gui import APP_TITLE, EMPTY_STR
@@ -17,7 +18,6 @@ from src.gui.combinedGUI import album_arts_runner, lyrics_runner, album_names_ru
 
 class GUI(Tk):
     previous_widget_color = None
-    EXTENSIONS_SUPPORTED = ['.mp3']
         
     def __init__(self):
         super().__init__()
@@ -89,7 +89,7 @@ class GUI(Tk):
         event.widget['background'] = self.previous_widget_color
 
     def get_files_names(self):
-        return [file_name for file_name in listdir(self.PATH_MUSIC) for extension in self.EXTENSIONS_SUPPORTED if validate_extension(file_name, extension)]
+        return [file_name for file_name in listdir(self.PATH_MUSIC) for extension in EXTENSIONS_SUPPORTED if validate_extension(file_name, extension)]
 
     def browse_button(self):
         self.PATH_MUSIC =  filedialog.askdirectory()
