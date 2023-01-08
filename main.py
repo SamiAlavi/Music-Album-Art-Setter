@@ -1,46 +1,42 @@
-import os
-from combined import setupSession, getAllArts, setArtRunner, getAllLyrics, setLyricsRunner, setAlbum, setPaths
+if __name__ != '__main__':  
+    exit()
 
-def checkformat(query, formats):
-    return query.lower().endswith(formats)
+from src.helper.constants import TEXT_ALBUM_ARTS, TEXT_LYRICS, TEXT_ALBUM_NAMES
+from src.helper.helper import setPaths, get_music_files_names
 
-if __name__ == '__main__':  
-    if 'src' in os.listdir():
-        os.chdir('src/')        
-        
-    PATH_MUSIC='Music'
-    setPaths(PATH_MUSIC)
-    files = os.listdir(PATH_MUSIC)    
-    audioforms = ['.mp3'] #.mp3 supported
-    options = ['n','y']
+def is_yes_option_selected(option):
+    return option == 'y'
 
-    # options
-    flag1 = input('Find album arts? (n/Y) ').lower()
-    while flag1 not in options:
-        flag1 = input('Find album arts? (n/Y) ').lower()
+def get_input_lowercase(message):
+    return input(message).lower()
+
+def get_user_input(message):
+    options = ['n', 'y']
+    user_input = get_input_lowercase(message)
+    while user_input not in options:
+        print('Valid input: (N/Y/n/y)')
+        user_input = get_input_lowercase(message)
+    return is_yes_option_selected(user_input)
     
-    flag2 = input('Find music lyrics? (N/y) ').lower()
-    while flag2 not in options:
-        flag2 = input('Find music lyrics? (N/y) ').lower()
 
-    flag3 = input('Rename album names? (N/y) ').lower()
-    while flag3 not in options:
-        flag3 = input('Rename album names? (N/y) ').lower()
-        
-    setupSession()
-    files = [fname for fname in files for formatt in audioforms if checkformat(fname, formatt)]
-    print('\nTotal files:',len(files))
-    
-    if flag1=='y':
-        print('\nGetting album arts')
-        getAllArts(files) #getAllArts called
-        setArtRunner(files) #setArtRunner called
-    
-    if flag2=='y':
-        print('\nGetting lyrics')
-        getAllLyrics(files) #getAllLyrics called
-        setLyricsRunner(files) #setLyricsRunner called
+find_album_arts = get_user_input(f'{TEXT_ALBUM_ARTS} (n/Y) ')
+find_music_lyrics = get_user_input(f'{TEXT_LYRICS} (N/y) ')
+rename_albums_names = get_user_input(f'{TEXT_ALBUM_NAMES} (N/y) ')
 
-    if flag3=='y':
-        print('\nGetting album names')
-        setAlbum(files) #setAlbum called
+PATH_MUSIC = 'Music'
+setPaths(PATH_MUSIC)
+
+files_names = get_music_files_names(PATH_MUSIC)
+print(f'\nTotal files: {len(files_names)}')
+
+if find_album_arts:
+    from src.album_art import start_album_arts_runner
+    start_album_arts_runner(files_names)
+
+if find_music_lyrics:
+    from src.lyrics import start_lyrics_runner
+    start_lyrics_runner(files_names)
+
+if rename_albums_names:
+    from src.album_name import start_album_names_runner
+    start_album_names_runner(files_names)
