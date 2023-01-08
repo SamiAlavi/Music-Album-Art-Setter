@@ -6,14 +6,14 @@ from ..helper.helper_gui import APP_ICON
 from ..helper.helper_gui import TITLE_INFO, TITLE_APP_QUIT, EMPTY_STR
 from ..helper.helper_gui import TEXT_DIALOG_QUIT
 from ..helper.helper_gui import COLOR_RED
-from ..helper.helper_gui import resource_path, setup_quit_button
+from ..helper.helper_gui import get_music_icon_path, setup_quit_button
 
 class Dialog():
 
     def __init__(self, text):
         root = Tk()
 
-        root.iconbitmap(resource_path(APP_ICON))
+        root.iconbitmap(get_music_icon_path(APP_ICON))
         root.title(TITLE_INFO)
         width, height = 500, 100
         geometry = f'{width}x{height}'

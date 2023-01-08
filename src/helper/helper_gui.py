@@ -3,7 +3,7 @@ import os
 from tkinter import messagebox
 
 APP_TITLE = 'Music Album Art Setter'
-APP_ICON = 'music.ico'
+APP_ICON = 'music'
 EMPTY_STR = ''
 
 EVENT_RETURN = '<Return>'
@@ -36,6 +36,21 @@ COLOR_BLUE = 'blue'
 COLOR_RED = 'red'
 
 ICON_WARNING = 'warning'
+
+EXTENSION_ICO = 'ico'
+EXTENSION_XBM = 'xbm'
+
+PLATFORM_WINDOWS = 'win32'
+PLATFORM_LINUX = 'linux'
+PLATFORM_OSX = 'darwin'
+
+def get_music_icon_path(icon_name):
+    absolute_path = resource_path(icon_name)
+    if sys.platform == PLATFORM_LINUX or sys.platform == PLATFORM_OSX:
+        return f'@{absolute_path}.{EXTENSION_XBM}'
+    elif sys.platform == PLATFORM_WINDOWS:
+        return f'{absolute_path}.{EXTENSION_ICO}'
+    return None
 
 def resource_path(relative_path):    
     try:       

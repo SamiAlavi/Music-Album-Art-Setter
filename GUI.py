@@ -5,7 +5,7 @@ from tkinter import Tk, Frame, Button, Label, Checkbutton, Listbox, Scrollbar, m
 from tkinter import IntVar, BOTH, RIGHT, BOTTOM, NORMAL, DISABLED, END, W, X
 from src.helper.helper import setPaths
 from src.helper.helper_path import validate_extension
-from src.helper.helper_gui import resource_path, setup_quit_button
+from src.helper.helper_gui import get_music_icon_path, setup_quit_button
 from src.helper.helper_gui import APP_ICON, APP_TITLE, EMPTY_STR
 from src.helper.helper_gui import TITLE_APP_QUIT, TITLE_COMPLETED
 from src.helper.helper_gui import TEXT_APP_QUIT, TEXT_NO_OPTIONS, TEXT_NO_MUSIC_FILES, TEXT_BROWSE, TEXT_RUN, TEXT_PATH
@@ -28,7 +28,7 @@ class GUI(Tk):
         self.bind(EVENT_RETURN, self.run_combined)
 
     def setup_root(self):
-        self.iconbitmap(resource_path(APP_ICON))
+        self.iconbitmap(get_music_icon_path(APP_ICON))
         self.title(APP_TITLE)
         width, height = 500, 300
         geometry = f'{width}x{height}'
