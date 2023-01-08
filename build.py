@@ -1,5 +1,6 @@
 import sys
 import PyInstaller.__main__
+from src.helper.helper import join_paths
 from src.helper.helper_gui import APP_ICON_DIR, APP_ICON, PLATFORM_WINDOWS, PLATFORM_LINUX, PLATFORM_OSX, EXTENSION_XBM, EXTENSION_ICO
 
 def get_music_icon_path():
@@ -8,7 +9,7 @@ def get_music_icon_path():
         extension = EXTENSION_XBM
     elif sys.platform == PLATFORM_WINDOWS:
         extension = EXTENSION_ICO
-    return f'{APP_ICON_DIR}/{APP_ICON}.{extension}'
+    return join_paths(APP_ICON_DIR, f'{APP_ICON}.{extension}')
 
 def get_add_data_separator():
     if sys.platform == PLATFORM_LINUX or sys.platform == PLATFORM_OSX:

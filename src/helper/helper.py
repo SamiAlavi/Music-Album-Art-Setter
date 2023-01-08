@@ -1,4 +1,4 @@
-from .helper_path import hide_directory, createDirectory
+from .helper_path import hide_directory, createDirectory, join_paths
 
 PATH_MUSIC = None
 PATH_IMAGES = None
@@ -17,9 +17,9 @@ def create_directories():
 def setPaths(path):
     global PATH_MUSIC, PATH_IMAGES, PATH_LYRICS, PATH_ERRORS
     PATH_MUSIC = path
-    PATH_ERRORS = f'{path}/downloads'   
-    PATH_IMAGES = f'{path}/downloads/images'
-    PATH_LYRICS = f'{path}/downloads/lyrics'
+    PATH_ERRORS = join_paths(path, 'downloads')
+    PATH_IMAGES = join_paths(PATH_ERRORS, 'images')
+    PATH_LYRICS = join_paths(PATH_ERRORS, 'lyrics')
 
 def get_update_callback(dialog):
     if dialog:

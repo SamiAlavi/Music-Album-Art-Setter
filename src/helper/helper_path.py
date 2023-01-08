@@ -35,3 +35,12 @@ def unhide_directory(path_directory):
 
 def validate_extension(file_name, extension):
     return file_name.lower().endswith(extension)
+
+def join_paths(*paths):
+    return path.join(*paths)
+
+def is_file(file_path):
+    return path.isfile(file_path)
+
+def get_current_absolute_path():
+    return path.abspath('.')

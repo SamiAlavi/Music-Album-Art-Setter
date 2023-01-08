@@ -1,6 +1,7 @@
 import sys
 import os
 from tkinter import messagebox
+from .helper_path import join_paths, is_file, get_current_absolute_path
 
 APP_TITLE = 'Music Album Art Setter'
 APP_ICON_DIR = 'icons'
@@ -46,7 +47,7 @@ PLATFORM_LINUX = 'linux'
 PLATFORM_OSX = 'darwin'
 
 def get_music_icon_path():
-    icon_path = os.path.join(APP_ICON_DIR, APP_ICON)
+    icon_path = join_paths(APP_ICON_DIR, APP_ICON)
 
     prefix = ''
     extension = EXTENSION_ICO # default icon extension currently set as ICO
@@ -57,7 +58,7 @@ def get_music_icon_path():
         extension = EXTENSION_ICO
 
     absolute_path = f'{resource_path(icon_path)}.{extension}'
-    if os.path.isfile(absolute_path):
+    if is_file(absolute_path):
         return f'{prefix}{absolute_path}'
 
     return None
@@ -66,8 +67,8 @@ def resource_path(relative_path):
     try:       
         base_path = sys._MEIPASS
     except Exception:
-        base_path = os.path.abspath('.')
-    return os.path.join(base_path, relative_path)
+        base_path = get_current_absolute_path()
+    return join_paths(base_path, relative_path)
 
 def setup_quit_button(root, title, text):
     root.protocol('WM_DELETE_WINDOW', lambda : quitDialog(root, title, text))
