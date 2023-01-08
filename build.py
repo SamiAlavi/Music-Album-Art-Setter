@@ -1,4 +1,5 @@
 import sys
+import pyinstaller_versionfile
 import PyInstaller.__main__
 from src.helper.constants import PLATFORM_WINDOWS, PLATFORM_LINUX, PLATFORM_OSX
 from src.helper.constants import APP_ICON_DIR, APP_ICON, EXTENSION_XBM, EXTENSION_ICO
@@ -19,20 +20,41 @@ def get_add_data_separator():
         return ';'
     return ';'
 
-platform = sys.platform
-icon_path = get_music_icon_path()
+def create_version_file():
+    pyinstaller_versionfile.create_versionfile(
+        output_file=version_file_name,
+        version=version,
+        company_name="",
+        file_description="Music metadata editor which automatically sets album covers, album names and lyrics for the given mp3 files",
+        internal_name="Music Setter",
+        legal_copyright="©",
+        original_filename="Music Setter",
+        product_name="Music Setter",
+        translations=[1033, 1200] # default
+    )
+
+def build():
+    PyInstaller.__main__.run([
+        '--onefile',
+        '--add-data',
+        f'{icon_path}{add_data_separator}{APP_ICON_DIR}',
+        '--windowed',
+        '--clean',
+        '--noconfirm',
+        f'--version-file={version_file_name}',
+        f'--icon={icon_path}',
+        f'--name={distribution_name}-v{version}-{platform}',
+        f'{script_name}',
+    ])
+
+
 distribution_name = 'music_setter'
 script_name = 'GUI.py'
-add_data_separator = get_add_data_separator()
+version_file_name = '_version'
+version = '1.1.0'
 
-PyInstaller.__main__.run([
-    '--onefile',
-    '--add-data',
-    f'{icon_path}{add_data_separator}{APP_ICON_DIR}',
-    '--windowed',
-    '--clean',
-    '--noconfirm',
-    f'--icon={icon_path}',
-    f'--name={distribution_name}-{platform}',
-    f'{script_name}',
-])
+platform = sys.platform
+icon_path = get_music_icon_path()
+add_data_separator = get_add_data_separator()
+create_version_file()
+build()

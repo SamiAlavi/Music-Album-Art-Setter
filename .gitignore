@@ -4,6 +4,7 @@ dist
 **/__pycache__
 count.txt
 debug.log
+__version
 *.spec
 
 !Music/.gitkeep
