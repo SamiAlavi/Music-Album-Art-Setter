@@ -1,7 +1,7 @@
 from os import listdir
 from json import loads
 from stagger import read_tag
-from .helper.constants import EXTENSION_JPG, FILE_ERROR_ART_GET, FILE_ERROR_ART_SET
+from .helper.constants import EXTENSION_JPG, FILE_ERROR_ART_GET, FILE_ERROR_ART_SET, URL_IMAGES_BING
 from .helper.helper import PATH_MUSIC, PATH_IMAGES, PATH_ERRORS
 from .helper.helper import create_directories, get_update_callback, join_paths
 from .helper.helper_request import getUrlContent, getParseableSoup
@@ -37,7 +37,7 @@ def saveImage(file_name, image_url):
 
 def downloadImage(file_name):
     global PATH_ERRORS
-    url = 'https://www.bing.com/images/search?q={}&first=1&tsc=ImageBasicHover'
+    url = URL_IMAGES_BING
     try:
         param = file_name[:-4]
         soup = getParseableSoup(url, param)

@@ -1,9 +1,10 @@
 from os import listdir
 from eyed3 import load
 from .helper.constants import FILE_ERROR_LYRICS_GET, FILE_ERROR_LYRICS_SET
+from .helper.constants import URL_LYRICS_YAHOO, URL_LYRICS_AZLYRICS, URL_LYRICS_LETSSINGIT, URL_LYRICS_LYRICSBOX
 from .helper.helper import PATH_MUSIC, PATH_LYRICS, PATH_ERRORS
 from .helper.helper import create_directories, get_update_callback, join_paths
-from .helper.helper_request import getParseableSoup
+from .helper.helper_request import getParseableSoup, encodeUrl_lower
 from .helper.helper_path import unhide_directory, read_file, append_error_to_file, write_to_file
 
 #----------------- SET LYRICS ------------------#
@@ -44,11 +45,11 @@ def getYahooReferrerLink(link):
 
 def downloadLyrics(file_name):
     global PATH_ERRORS
-    yahoo_search_url='https://search.yahoo.com/search?p={}%20lyrics'
-    azlyrics = 'azlyrics.com%2flyrics' # azlyrics temporary blocks IP address
-    letssingit = 'letssingit.com%2f'
-    lyricsbox = 'lyricsbox.com%2f'
-    nott = '%2flyrics'
+    yahoo_search_url = URL_LYRICS_YAHOO
+    azlyrics = encodeUrl_lower(URL_LYRICS_AZLYRICS, safe='') # azlyrics temporary blocks IP address
+    letssingit = encodeUrl_lower(URL_LYRICS_LETSSINGIT, safe='')
+    lyricsbox = encodeUrl_lower(URL_LYRICS_LYRICSBOX, safe='')
+    nott = encodeUrl_lower('/lyrics', safe='')
     
     param = file_name[:-4]
     soup = getParseableSoup(yahoo_search_url, param)

@@ -1,6 +1,7 @@
 from requests import Session
 from bs4 import BeautifulSoup
 from urllib.parse import quote
+from re import findall
 
 SESSION = None
 
@@ -12,8 +13,18 @@ def setupSession():
     SESSION = Session()
     SESSION.headers = headers
 
-def encodeUrl(url):
-    return quote(url) # urllib.parse.quote()
+def encodeUrl(url, safe='/'):
+    return quote(url, safe=safe)
+
+def encodeUrl_lower(url, safe='/'):
+    encoded = encodeUrl(url, safe)
+    pattern = "%[A-Z,0-9][A-Z,0-9]"
+    result = set(findall(pattern, encoded)) # Convert the result to a set so each entry is unique  
+
+    for res in result:
+        encoded = encoded.replace(res , res.lower())
+
+    return encoded
 
 def getUrlContent(url, param=None):
     global SESSION
