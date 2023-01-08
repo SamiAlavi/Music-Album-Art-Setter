@@ -1,10 +1,8 @@
 if __name__ != '__main__':  
     exit()
 
-from os import listdir
-from src.helper.constants import EXTENSIONS_SUPPORTED, TEXT_ALBUM_ARTS, TEXT_LYRICS, TEXT_ALBUM_NAMES
-from src.helper.helper import setPaths
-from src.helper.helper_path import validate_extension
+from src.helper.constants import TEXT_ALBUM_ARTS, TEXT_LYRICS, TEXT_ALBUM_NAMES
+from src.helper.helper import setPaths, get_music_files_names
 
 def is_yes_option_selected(option):
     return option == 'y'
@@ -28,7 +26,7 @@ rename_albums_names = get_user_input(f'{TEXT_ALBUM_NAMES} (N/y) ')
 PATH_MUSIC = 'Music'
 setPaths(PATH_MUSIC)
 
-files_names = [file_name for file_name in listdir(PATH_MUSIC) for extension in EXTENSIONS_SUPPORTED if validate_extension(file_name, extension)]
+files_names = get_music_files_names(PATH_MUSIC)
 print(f'\nTotal files: {len(files_names)}')
 
 if find_album_arts:

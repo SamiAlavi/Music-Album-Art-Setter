@@ -1,17 +1,14 @@
 
 import sys
-from os import listdir
 from tkinter import Tk, Frame, Button, Label, Checkbutton, Listbox, Scrollbar, messagebox, filedialog
 from tkinter import IntVar, BOTH, RIGHT, BOTTOM, NORMAL, DISABLED, END, W, X
-from src.helper.constants import EXTENSIONS_SUPPORTED
 from src.helper.constants import APP_TITLE, EMPTY_STR
 from src.helper.constants import TITLE_APP_QUIT, TITLE_COMPLETED
 from src.helper.constants import TEXT_APP_QUIT, TEXT_NO_OPTIONS, TEXT_NO_MUSIC_FILES, TEXT_BROWSE, TEXT_RUN, TEXT_PATH
 from src.helper.constants import TEXT_ALBUM_ARTS, TEXT_LYRICS, TEXT_ALBUM_NAMES
 from src.helper.constants import EVENT_RETURN, EVENT_ENTER, EVENT_LEAVE
 from src.helper.constants import COLOR_WHITE, COLOR_BLUE, COLOR_RED, COLOR_BLACK, COLOR_DARK_BLUE
-from src.helper.helper import setPaths
-from src.helper.helper_path import validate_extension
+from src.helper.helper import setPaths, get_music_files_names
 from src.helper.helper_gui import get_music_icon_path, setup_quit_button, get_geometry
 from src.gui.NullIO import NullIO
 from src.gui.combinedGUI import album_arts_runner, lyrics_runner, album_names_runner
@@ -88,9 +85,6 @@ class GUI(Tk):
     def on_leave(self, event):
         event.widget['background'] = self.previous_widget_color
 
-    def get_files_names(self):
-        return [file_name for file_name in listdir(self.PATH_MUSIC) for extension in EXTENSIONS_SUPPORTED if validate_extension(file_name, extension)]
-
     def browse_button(self):
         self.PATH_MUSIC =  filedialog.askdirectory()
         if self.PATH_MUSIC:
@@ -105,7 +99,7 @@ class GUI(Tk):
 
     def update_files_list(self):
         self.listbox.delete(0, END)
-        self.files_names = self.get_files_names()
+        self.files_names = get_music_files_names(self.PATH_MUSIC)
         padding_left = '     '
 
         if len(self.files_names):
@@ -115,7 +109,7 @@ class GUI(Tk):
                 self.listbox.insert(END, text) 
             self.button2.configure(state=NORMAL, fg=COLOR_WHITE, bg=COLOR_BLUE)
         else:
-            #text = NO_MUSIC_FILES_TEXT
+            #text = TEXT_NO_MUSIC_FILES
             self.button2.configure(state=DISABLED, bg=COLOR_BLACK)
 
     def setup_options(self):
