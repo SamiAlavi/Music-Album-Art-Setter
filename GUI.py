@@ -117,13 +117,13 @@ class GUI(Tk):
         self.find_music_lyrics = IntVar()
         self.rename_albums_names = IntVar()
 
-        c1 = Checkbutton(self.frame1, text=TEXT_ALBUM_ARTS, variable=self.find_album_arts, onvalue=1, offvalue=0)
-        c2 = Checkbutton(self.frame1, text=TEXT_LYRICS, variable=self.find_music_lyrics, onvalue=1, offvalue=0)
-        c3 = Checkbutton(self.frame1, text=TEXT_ALBUM_NAMES, variable=self.rename_albums_names, onvalue=1, offvalue=0)
+        checkbox_arts = Checkbutton(self.frame1, text=TEXT_ALBUM_ARTS, variable=self.find_album_arts, onvalue=1, offvalue=0)
+        checkbox_lyrics = Checkbutton(self.frame1, text=TEXT_LYRICS, variable=self.find_music_lyrics, onvalue=1, offvalue=0)
+        checkbox_name = Checkbutton(self.frame1, text=TEXT_ALBUM_NAMES, variable=self.rename_albums_names, onvalue=1, offvalue=0)
 
-        c1.pack(anchor=W, ipadx=10)
-        c2.pack(anchor=W, ipadx=10)
-        c3.pack(anchor=W, ipadx=10)
+        checkbox_arts.pack(anchor=W, ipadx=10)
+        checkbox_lyrics.pack(anchor=W, ipadx=10)
+        checkbox_name.pack(anchor=W, ipadx=10)
     
     def run_combined(self, event=None):
         if not len(self.files_names):
