@@ -4,7 +4,9 @@ PATH_MUSIC = None
 PATH_IMAGES = None
 PATH_LYRICS = None
 PATH_ERRORS = None
+
 EXTENSIONS_SUPPORTED = ['.mp3']
+EXTENSION_JPG = 'jpg'
 
 def create_directories():
     global PATH_IMAGES, PATH_LYRICS, PATH_ERRORS
