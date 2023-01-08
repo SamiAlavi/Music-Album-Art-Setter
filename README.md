@@ -14,16 +14,15 @@ Powered by
   <img title="AZLyrics" alt="AZLyrics" width="30" src="https://www.azlyrics.com/az_logo_tr.png"/>
 </a>
 
----
-# Instructions
-### For Script
+## Instructions
+### For Python Script
 1) Make sure you have python and pip installed (https://www.python.org/)
 2) Clone this repository
 3) Run `pip install -r requirements.txt`
 4) Copy your music in the `./Music` directory
 5) Run `main.py`
 
-## For GUI
+### For Python GUI
 1) Download `music_setter.exe` from [Releases(v1.0.0)](https://github.com/SamiAlavi/Music-Album-Art-Setter/releases/tag/v1.0.0 "Releases(v1.0.0)") 
 2) Locate your music directory using Browse
 3) Check options that you need (album_art, music_lyrics, album_name)
@@ -33,8 +32,7 @@ Powered by
 7) `Album Names` are currently set using the `count.txt` file
 8) `Errors` can be checked from files created in `YOUR_MUSIC_DIR/downloads/`
 
----
-# Future work
+## Future work
 - Get correct `Album Names` from the internet
 - Support for other audio formats
 - Get `Album Arts`, `Lyrics`, `Album Names` from API instead of Web Scraping
