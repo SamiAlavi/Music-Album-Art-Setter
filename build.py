@@ -10,13 +10,21 @@ def get_icon_path(icon_name):
         extension = EXTENSION_ICO
     return f'{icon_name}.{extension}'
 
+def get_add_data_separator():
+    if sys.platform == PLATFORM_LINUX or sys.platform == PLATFORM_OSX:
+        return ':'
+    elif sys.platform == PLATFORM_WINDOWS:
+        return ';'
+    return ';'
+
 icon_path = get_icon_path(APP_ICON)
 distribution_name = 'GUI'
 script_name = 'GUI.py'
+add_data_separator = get_add_data_separator()
 
 PyInstaller.__main__.run([
     '--add-data',
-    f'{icon_path};.',
+    f'{icon_path}{add_data_separator}.',
     '--windowed',
     '--clean',
     '--noconfirm',
