@@ -1,5 +1,9 @@
+import sys
 from os import path, makedirs
 from subprocess import call
+from src.helper.helper_gui import PLATFORM_WINDOWS
+
+IS_PLATFORM_WINDOWS = sys.platform == PLATFORM_WINDOWS
 
 def createDirectory(path_directory):
     if not path.exists(path_directory):
@@ -22,10 +26,12 @@ def read_file(path_file):
         return file.read()
 
 def hide_directory(path_directory):
-    call(["attrib", "+H", path_directory])
+    if IS_PLATFORM_WINDOWS:
+        call(["attrib", "+H", path_directory])
 
 def unhide_directory(path_directory):
-    call(["attrib", "-H", path_directory])
+    if IS_PLATFORM_WINDOWS:
+        call(["attrib", "-H", path_directory])
 
 def validate_extension(file_name, extension):
     return file_name.lower().endswith(extension)
