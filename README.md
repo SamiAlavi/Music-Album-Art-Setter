@@ -41,6 +41,7 @@ Music metadata editor which automatically sets album covers, album names and lyr
 
 ## Future work
 - Write unit tests
+- Add proxy support
 - CI/CD and automation
 - Get correct `Album Names` from the internet
 - Support for other audio formats
