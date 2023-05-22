@@ -1,4 +1,4 @@
-requests==2.22.0
+requests==2.31.0
 https://github.com/SamiAlavi/stagger/archive/release-1.0.2.tar.gz
 eyed3==0.9.5
 beautifulsoup4==4.9.3
